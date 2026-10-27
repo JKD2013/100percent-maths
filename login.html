@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100Percent - Sign in or create account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">100</div>
+        <span>Percent</span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="for-teachers.html" class="nav-link">For Teachers</a>
+        <a href="for-schools.html" class="nav-link">For Schools</a>
+        <a href="for-students.html" class="nav-link">For Students</a>
+        <a href="about-us.html" class="nav-link">About Us</a>
+        <a href="pricing.html" class="nav-link">Pricing</a>
+        <a href="contact-us.html" class="nav-link">Contact Us</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://github.com" class="btn-outline-nav btn-sm" target="_blank" rel="noopener noreferrer" title="View on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-4.77 0-0.84-0.33-1.14-0.33-1.85h-0.05c-0.27-0.65-0.97-0.97-1.82-0.97-1.12 0-1.82 0.3-2.67 0.65v-2.03c-0.38 0.44-0.89 0.72-1.53 0.84-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.64-0.12-1.15-0.4-1.53-0.84v2.03c-0.85-0.35-1.55-0.65-2.67-0.65-0.85 0-1.55 0.32-1.82 0.97h-0.05c0-0.71-0.33-1.01-0.33-1.85 0-3.23 3.3-4.42 6.44-4.77a3.37 3.37 0 0 0-.94 2.61v3.87a3 3 0 0 1-0.94 2.91c-0.94 0.25-1.82 0.49-2.67 0.65-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0-.94 2.91v3.87a3 3 0 0 1 0.94 2.91c0.94 0.25 1.82 0.49 2.67 0.65 0.32 0.06 0.65 0.06 0.97 0.06 0.32 0 0.65-0.06 0.97-0.06 0.85 0 1.55-0.32 1.82-0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87a3 3 0 0 1 0.94-2.91c0.85 0.25 1.72 0.49 2.67 0.65 0.32 0.06 0.65 0.06 0.97 0.06 0.32 0 0.65-0.06 0.97-0.06 0.85 0 1.55-0.32 1.82-0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87z"></path>
+          </svg>
+        </a>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Page -->
+  <div class="login-page">
+    <div class="login-container">
+      <div class="login-form-wrapper">
+        <a href="index.html" class="login-back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Home
+        </a>
+
+        <div class="auth-header">
+          <div class="login-brand">
+            <div class="logo-mark">100</div>
+            <span>Percent</span>
+          </div>
+          <p class="auth-subtitle" id="authTitle">Welcome back</p>
+          <p class="auth-description" id="authDesc">Sign in to continue your mathematical journey.</p>
+        </div>
+
+        <!-- ===== SIGN IN FORM ===== -->
+        <form class="login-card auth-form" id="signInForm" data-mode="signin">
+          <div class="form-group">
+            <label class="form-label" for="signinEmail">Email address</label>
+            <input type="email" class="form-input" id="signinEmail" placeholder="name@school.edu" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signinPassword">Password</label>
+            <div class="password-wrapper">
+              <input type="password" class="form-input" id="signinPassword" placeholder="••••••••" required />
+              <button type="button" class="password-toggle" id="toggleSigninPassword">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-full auth-submit-btn" id="signinSubmitBtn">Sign in</button>
+          </div>
+
+          <div class="auth-help">
+            <a href="#" id="forgotPasswordLink">Having trouble signing in?</a>
+          </div>
+        </form>
+
+        <!-- ===== SIGN UP FORM (hidden by default) ===== -->
+        <form class="login-card auth-form hidden" id="signUpForm" data-mode="signup">
+          <div class="form-group">
+            <label class="form-label" for="signupFullName">Full name</label>
+            <input type="text" class="form-input" id="signupFullName" placeholder="Alex Student" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email address</label>
+            <input type="email" class="form-input" id="signupEmail" placeholder="name@school.edu" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <div class="password-wrapper">
+              <input type="password" class="form-input" id="signupPassword" placeholder="••••••••" required />
+              <button type="button" class="password-toggle" id="toggleSignupPassword">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupConfirmPassword">Confirm password</label>
+            <div class="password-wrapper">
+              <input type="password" class="form-input" id="signupConfirmPassword" placeholder="••••••••" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-full auth-submit-btn" id="signupSubmitBtn">Create account</button>
+          </div>
+
+          <div class="auth-help">
+            <p class="auth-hint">Already have an account? <a href="#" id="switchToSignin">Sign in</a></p>
+          </div>
+        </form>
+
+        <!-- ===== DIVIDER ===== -->
+        <div class="auth-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">Or continue with</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- ===== OAUTH BUTTONS ===== -->
+        <div class="oauth-buttons">
+          <button type="button" class="btn oauth-btn oauth-google" id="oauthGoogleBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#4285F4" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#F4B400" d="M5.84 14.09c-.22-.62-.35-1.3-.35-2.09s.13-1.47.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#0F9D58" d="M12 5.38c1.62 0 3.06 .56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+          </button>
+
+          <button type="button" class="btn oauth-btn oauth-microsoft" id="oauthMicrosoftBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <rect x="2" y="2" width="8" height="8" fill="#F25022"/>
+              <rect x="14" y="2" width="8" height="8" fill="#7FBA00"/>
+              <rect x="2" y="14" width="8" height="8" fill="#00A4EF"/>
+              <rect x="14" y="14" width="8" height="8" fill="#FFB900"/>
+            </svg>
+            Sign in with Microsoft
+          </button>
+        </div>
+
+        <div class="auth-switch">
+          <span id="switchPrompt">New to 100Percent?</span>
+          <a href="#" id="switchToSignup">Create an account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

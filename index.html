@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100Percent — Maths Confidence, Engineered</title>
+  <meta name="description" content="Personalised maths homework from Upper Key Stage 2 to A-Level. Proven by The University of Cambridge to significantly boost grades." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Preloader — ASCII progress, igloo-style -->
+  <div id="preloader" aria-hidden="true">
+    <div class="preloader-bar" id="preloaderBar"><span class="fill">+</span>============</div>
+    <div class="preloader-meta">100PERCENT // THE DESCENT — <span id="preloaderPct">0%</span></div>
+  </div>
+
+  <!-- Fixed WebGL scene -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- HUD — pinned corners, type as instrumentation -->
+  <div class="hud">
+    <div class="hud-tl">
+      <a href="index.html" class="logo" aria-label="100Percent home">
+        <div class="logo-mark">100</div>
+        <span class="logo-word">PERCENT</span>
+      </a>
+    </div>
+
+    <nav class="hud-tr" aria-label="Primary">
+      <div class="hud-nav">
+        <a href="for-teachers.html">Teachers</a>
+        <a href="for-schools.html">Schools</a>
+        <a href="for-students.html">Students</a>
+        <a href="about-us.html">About</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="contact-us.html">Contact</a>
+        <a href="https://github.com" class="hud-nav-github" target="_blank" rel="noopener noreferrer" title="View on GitHub">GitHub</a>
+      </div>
+      <a href="login.html" class="hud-login">[ Log in ]</a>
+    </nav>
+
+    <div class="hud-bl">
+      Scroll to descend <span class="cue-arrow">↓</span>
+    </div>
+
+    <div class="hud-br">
+      <span class="dot"></span>SYS.OK — WEBGL / 60FPS<br>
+      KS2 → A-LEVEL // NAVY-GOLD
+    </div>
+  </div>
+
+  <!-- Journey — scroll feeds the camera -->
+  <main id="journey">
+
+    <!-- 00 · HERO — the scene owns this beat -->
+    <section class="beat beat-hero" aria-label="Introduction"></section>
+
+    <!-- 01 · MANIFESTO -->
+    <section class="beat beat-manifesto" aria-label="Manifesto">
+      <div class="beat-inner">
+        <p class="section-kicker">01 — Manifesto</p>
+        <h2 class="statement">Building maths confidence through <em>personalised homework.</em></h2>
+        <p class="manifesto-sub">
+          Proven by The University of Cambridge to significantly boost grades.
+          One system for lessons, homework, assessments and exam prep —
+          from Upper Key Stage 2 to A-Level.
+        </p>
+      </div>
+    </section>
+
+    <!-- 02 · STATION 01 — PERSONALISED (object right, caption right) -->
+    <section class="beat beat-station align-right" aria-label="Personalised">
+      <div class="station-caption">
+        <div class="station-leader"></div>
+        <p class="station-index">STATION 01 // SPECIMEN: OCTAHEDRON</p>
+        <h3 class="station-label">Personalised</h3>
+        <p class="station-body">
+          Challenging and attainable homework tailored to every student's level.
+          Instant feedback turns mistakes into learning, in real time.
+        </p>
+        <p class="station-meta">INTEL: ADAPTIVE // KS2 → A-LEVEL</p>
+      </div>
+    </section>
+
+    <!-- 03 · STATION 02 — PROVEN (object left, caption left) -->
+    <section class="beat beat-station align-left" aria-label="Proven">
+      <div class="station-caption">
+        <div class="station-leader"></div>
+        <p class="station-index">STATION 02 // SPECIMEN: TORUS-KNOT</p>
+        <h3 class="station-label">Proven</h3>
+        <p class="station-body">
+          Independent research with The University of Cambridge shows
+          significant grade improvement across 2,600+ schools.
+        </p>
+        <p class="station-meta">INTEL: VERIFIED // CAMBRIDGE</p>
+      </div>
+    </section>
+
+    <!-- 04 · STATION 03 — PROGRESS (object right, caption right) -->
+    <section class="beat beat-station align-right" aria-label="Progress">
+      <div class="station-caption">
+        <div class="station-leader"></div>
+        <p class="station-index">STATION 03 // SPECIMEN: DODECAHEDRON</p>
+        <h3 class="station-label">Progress</h3>
+        <p class="station-body">
+          Mastery levels, trophies and live analytics for every student,
+          class and school. Nothing about learning stays invisible.
+        </p>
+        <p class="station-meta">INTEL: LIVE // TEACHERS + STUDENTS</p>
+      </div>
+    </section>
+
+    <!-- 05 · DATA — telemetry readouts -->
+    <section class="beat beat-data" aria-label="Data">
+      <div class="beat-inner">
+        <p class="section-kicker">04 — Telemetry</p>
+        <div class="readout-row">
+          <div class="readout-value"><span data-counter="5000000000" data-suffix="+">5B</span><span class="readout-suffix">+</span></div>
+          <p class="readout-caption">High-quality questions answered</p>
+        </div>
+        <div class="readout-row">
+          <div class="readout-value"><span data-counter="73000000" data-suffix="+">73M</span><span class="readout-suffix">+</span></div>
+          <p class="readout-caption">Hours of personalised learning completed</p>
+        </div>
+        <div class="readout-row">
+          <div class="readout-value"><span data-counter="2200000" data-suffix="+">2.2M</span><span class="readout-suffix">+</span></div>
+          <p class="readout-caption">Students aged 11–16 supported</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · TRANSMISSIONS — testimonial ticker -->
+    <section class="beat beat-ticker" aria-label="Testimonials">
+      <div class="beat-inner">
+        <p class="section-kicker">05 — Transmissions</p>
+      </div>
+      <div class="marquee" aria-label="School testimonials">
+        <div class="marquee-group">
+          <div class="marquee-card">
+            <p class="marquee-quote">"Using 100Percent has completely changed our homework culture; more and more of our students now have a positive attitude towards homework which is amazing."</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">KH</div>
+              <div>
+                <div class="marquee-name">Katie Holt</div>
+                <div class="marquee-handle">HEAD OF MATHS — SOUTH DARTMOOR</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Our students have answered 532,843 questions correctly & 255 students have improved their times tables. Well done all!"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">GA</div>
+              <div>
+                <div class="marquee-name">Granville Academy</div>
+                <div class="marquee-handle">@GRANVILLE_DFT</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Well done Year 11 for showing dedication to 100Percent doing a bit of lunch time revision. #smashingmaths"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">LA</div>
+              <div>
+                <div class="marquee-name">The Laurel Academy</div>
+                <div class="marquee-handle">@DELTATHELAUREL</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Our 100Percent Superhero this week is... Jack K! Consistent homework every week, reflected in a fantastic mock result!"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">SW</div>
+              <div>
+                <div class="marquee-name">Stamford Welland</div>
+                <div class="marquee-handle">@STAMFORDWELLAND</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="marquee-group" aria-hidden="true">
+          <div class="marquee-card">
+            <p class="marquee-quote">"Using 100Percent has completely changed our homework culture; more and more of our students now have a positive attitude towards homework which is amazing."</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">KH</div>
+              <div>
+                <div class="marquee-name">Katie Holt</div>
+                <div class="marquee-handle">HEAD OF MATHS — SOUTH DARTMOOR</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Our students have answered 532,843 questions correctly & 255 students have improved their times tables. Well done all!"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">GA</div>
+              <div>
+                <div class="marquee-name">Granville Academy</div>
+                <div class="marquee-handle">@GRANVILLE_DFT</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Well done Year 11 for showing dedication to 100Percent doing a bit of lunch time revision. #smashingmaths"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">LA</div>
+              <div>
+                <div class="marquee-name">The Laurel Academy</div>
+                <div class="marquee-handle">@DELTATHELAUREL</div>
+              </div>
+            </div>
+          </div>
+          <div class="marquee-card">
+            <p class="marquee-quote">"Our 100Percent Superhero this week is... Jack K! Consistent homework every week, reflected in a fantastic mock result!"</p>
+            <div class="marquee-author">
+              <div class="marquee-avatar">SW</div>
+              <div>
+                <div class="marquee-name">Stamford Welland</div>
+                <div class="marquee-handle">@STAMFORDWELLAND</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 · FINALE — the platform -->
+    <section class="beat beat-finale" aria-label="Get started">
+      <div class="beat-inner">
+        <p class="section-kicker">06 — Begin</p>
+        <div class="finale-numeral">100<span>%</span></div>
+        <p class="finale-statement">
+          Every question answered is a deposit into mathematical confidence.
+          Log in to begin — or bring 100Percent to your whole school.
+        </p>
+        <div class="finale-actions">
+          <a href="login.html" class="btn btn-primary btn-lg btn-bracket">Begin — Log in</a>
+          <a href="for-schools.html" class="btn btn-ghost btn-lg">For schools</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- HUD footer -->
+  <footer class="footer-hud">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <span class="mono-label">Contact</span>
+        <p>+44 (0)20 3920 0020</p>
+        <a href="mailto:contact@sparx.co.uk">contact@sparx.co.uk</a>
+      </div>
+      <div class="footer-col">
+        <span class="mono-label">Index</span>
+        <a href="for-teachers.html">For Teachers</a>
+        <a href="for-schools.html">For Schools</a>
+        <a href="for-students.html">For Students</a>
+        <a href="about-us.html">About Us</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <span class="mono-label">System</span>
+        <p>2,600+ schools · 75k+ teachers</p>
+        <p>B Corp certified · Gordon's School colours</p>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 100PERCENT</span>
+      <span>THE DESCENT // BUILD 2.0</span>
+    </div>
+  </footer>
+
+  <!-- Libraries: Three.js → GSAP → Lenis (order matters) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
