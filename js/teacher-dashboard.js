@@ -73,13 +73,14 @@
         var card = document.createElement('div');
         card.className = 'group-card';
         card.innerHTML =
-          '<div class="group-card-header">' +
-          '  <div class="group-name">' + escapeHtml(group.name) + '</div>' +
-          '  <div class="group-member-count" id="memberCount-' + group.id + '">0 students</div>' +
+          '<div class=\"group-card-header\">' +
+          '  <div class=\"group-name\">' + escapeHtml(group.name) + '</div>' +
+          '  <div class=\"group-code\">Code: ' + escapeHtml(group.join_code) + '</div>' +
+          '  <div class=\"group-member-count\" id=\"memberCount-' + group.id + '\">0 students</div>' +
           '</div>' +
-          '<div class="group-actions">' +
-          '  <button class="btn btn-sm btn-primary view-group-btn" data-group-id="' + group.id + '" data-group-name="' + escapeHtml(group.name) + '">View Group</button>' +
-          '  <button class="btn btn-sm btn-ghost create-assignment-btn" data-group-id="' + group.id + '">Set Homework</button>' +
+          '<div class=\"group-actions\">' +
+          '  <button class=\"btn btn-sm btn-primary view-group-btn\" data-group-id=\"' + group.id + '\" data-group-name=\"' + escapeHtml(group.name) + '\">View Group</button>' +
+          '  <button class=\"btn btn-sm btn-ghost create-assignment-btn\" data-group-id=\"' + group.id + '\">Set Homework</button>' +
           '</div>';
         groupsList.appendChild(card);
 
