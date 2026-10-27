@@ -722,6 +722,20 @@ function initAnimationWatchdog() {
 }
 
 // ----------------------------------------
+// Sign Out
+// ----------------------------------------
+function signOut() {
+  if (typeof sb === 'undefined') return;
+  sb.auth.signOut().then(function () {
+    window.location.href = 'login.html';
+  }).catch(function () {
+    window.location.href = 'login.html';
+  });
+}
+
+window.signOut = signOut;
+
+// ----------------------------------------
 // Boot
 // ----------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
