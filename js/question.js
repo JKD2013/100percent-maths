@@ -2,10 +2,11 @@
 // 100Percent — Question controller (question.html)
 // Operate surface: requires session, loads the active task's
 // questions from Supabase, renders them one at a time, records
-// each attempt (RLS-protected), and awards XP on correct answers.
+// each attempt (RLS-protected), awards XP on correct answers.
+// Beautiful UI graphics with animations and feedback.
 // ============================================================
 
-/* global sb, answersMatch, window */
+/* global sb, answersMatch, gsap, window, document */
 
 (function () {
   'use strict';
@@ -18,14 +19,24 @@
     var currentIdx = 0;
     var questions = [];
     var task = null;
+    var correctCount = 0;
+    var totalXP = 0;
 
     // ---------- DOM ----------
-    var topicEl = document.querySelector('.question-topic');
-    var textEl = document.querySelector('.question-text');
-    var exprEl = document.querySelector('.question-expression');
+    var topicEl = document.getElementById('questionTopic');
+    var textEl = document.getElementById('questionText');
+    var exprEl = document.getElementById('questionExpression');
     var inputEl = document.querySelector('.question-answer-input');
-    var submitBtn = document.querySelector('.submit-answer-btn');
+    var submitBtn = document.getElementById('submitBtn');
     var navEl = document.querySelector('.question-nav');
+    var progressFill = document.getElementById('progressFill');
+    var currentEl = document.getElementById('questionCurrent');
+    var totalEl = document.getElementById('questionTotal');
+    var xpEl = document.getElementById('questionXp');
+    var scoreEl = document.getElementById('questionScore');
+    var feedbackEl = document.getElementById('questionFeedback');
+    var feedbackIcon = document.getElementById('feedbackIcon');
+    var feedbackMessage = document.getElementById('feedbackMessage');
 
     if (!exprEl || !inputEl || !submitBtn) return;
 
@@ -55,16 +66,15 @@
               submitBtn.style.display = 'none';
               return;
             }
+
+            // Limit to 5 questions per task as requested
+            if (questions.length > 5) {
+              questions = questions.slice(0, 5);
+            }
+
+            if (totalEl) totalEl.textContent = questions.length;
             if (topicEl) topicEl.textContent = (task.topic_code || '') + ' — ' + (task.title || '');
             render(0);
-
-            // Defensive fallback: guarantee the topic label shows even if the
-            // task object arrived late (Supabase schema-cache quirk).
-            setTimeout(function () {
-              if (topicEl && !topicEl.textContent.trim() && task && task.topic_code) {
-                topicEl.textContent = task.topic_code + ' — ' + (task.title || '');
-              }
-            }, 500);
           });
       });
 
@@ -78,6 +88,14 @@
       if (textEl) textEl.textContent = q.prompt || 'Answer the question.';
       if (exprEl) exprEl.textContent = q.expression;
 
+      // Update progress
+      var pct = ((idx + 1) / questions.length) * 100;
+      if (progressFill) {
+        progressFill.style.width = pct + '%';
+      }
+      if (currentEl) currentEl.textContent = idx + 1;
+      if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
+
       // nav buttons
       if (navEl) {
         navEl.innerHTML = '';
@@ -87,6 +105,7 @@
           btn.className = 'q-button';
           btn.textContent = (i + 1).toString();
           if (i === currentIdx) btn.classList.add('current');
+          else if (i < currentIdx) btn.classList.add('answered');
           btn.addEventListener('click', function () { render(i); });
           navEl.appendChild(btn);
         });
@@ -97,7 +116,32 @@
       inputEl.style.borderColor = '';
       submitBtn.textContent = 'Submit Answer';
       submitBtn.disabled = false;
-      submitBtn.classList.remove('correct');
+      submitBtn.classList.remove('correct', 'incorrect');
+
+      // Hide feedback overlay
+      if (feedbackEl) {
+        feedbackEl.classList.remove('show', 'correct', 'incorrect');
+      }
+    }
+
+    // ---------- Feedback overlay ----------
+    function showFeedback(correct, message) {
+      if (!feedbackEl) return;
+      feedbackEl.className = 'question-feedback show ' + (correct ? 'correct' : 'incorrect');
+      feedbackIcon.textContent = correct ? '✓' : '✗';
+      feedbackMessage.textContent = message;
+
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(feedbackEl,
+          { scale: 0.8, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' }
+        );
+      }
+    }
+
+    function hideFeedback() {
+      if (!feedbackEl) return;
+      feedbackEl.classList.remove('show');
     }
 
     // ---------- Submit ----------
@@ -106,6 +150,10 @@
       if (!given) {
         inputEl.style.borderColor = '#ef4444';
         inputEl.focus();
+        // Shake animation
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(inputEl, { x: -10 }, { x: 10, duration: 0.06, repeat: 3, yoyo: true, ease: 'power2', clearProps: 'x' });
+        }
         return;
       }
 
@@ -116,6 +164,16 @@
       submitBtn.disabled = true;
       inputEl.style.borderColor = correct ? '#10b981' : '#ef4444';
       submitBtn.classList.toggle('correct', correct);
+      submitBtn.classList.toggle('incorrect', !correct);
+
+      showFeedback(correct, correct ? 'Correct! Well done.' : 'Not quite. Try again.');
+
+      if (correct) {
+        correctCount++;
+        totalXP += 10;
+        if (xpEl) xpEl.textContent = totalXP;
+        if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
+      }
 
       // Record attempt
       sb.from('attempts').insert({
@@ -124,7 +182,7 @@
         answer: given,
         is_correct: correct
       }).then(function () {
-        // Award XP + streak on correct answers (profile updated directly)
+        // Award XP + streak on correct answers
         if (correct) {
           sb.from('profiles')
             .select('xp, streak, trophies')
@@ -141,18 +199,40 @@
         }
       });
 
-      // Auto-advance after a beat
+      // Auto-advance after feedback
       setTimeout(function () {
+        hideFeedback();
         if (currentIdx + 1 < questions.length) {
           render(currentIdx + 1);
         } else {
-          textEl.textContent = 'Task complete — great work.';
+          // Task complete
+          textEl.textContent = 'Task complete — great work!';
           exprEl.style.display = 'none';
           inputEl.style.display = 'none';
           submitBtn.style.display = 'none';
-          submitBtn.textContent = 'Finished';
+          feedbackEl.style.display = 'none';
+
+          if (typeof gsap !== 'undefined') {
+            gsap.to(textEl, { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1 });
+          }
+
+          // Show completion banner
+          var banner = document.createElement('div');
+          banner.className = 'completion-banner';
+          banner.innerHTML =
+            '<div class="completion-icon">🎉</div>' +
+            '<div class="completion-text">' +
+            '<div class="completion-title">Task Complete!</div>' +
+            '<div class="completion-stats">' +
+            '<span>' + correctCount + '/' + questions.length + ' correct</span>' +
+            '<span>+' + totalXP + ' XP</span>' +
+            '</div>' +
+            '</div>';
+          document.querySelector('.question-card').appendChild(banner);
+
+          gsap.fromTo(banner, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 });
         }
-      }, correct ? 900 : 1500);
+      }, correct ? 1200 : 1800);
     });
 
     inputEl.addEventListener('keypress', function (e) {
