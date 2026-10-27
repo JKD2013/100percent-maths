@@ -1,7 +1,7 @@
 // ============================================================
 // 100Percent — Auth controller (login.html)
 // Sign in, sign up, and OAuth (Google, Microsoft) via Supabase Auth.
-// On successful sign-in / sign-up → redirect to dashboard.html.
+// Routes teachers → teacher-dashboard.html, students → dashboard.html.
 // ============================================================
 
 /* global sb, window */
@@ -96,6 +96,15 @@
     }
   }
 
+  // ---------- Role-based redirect ----------
+  function redirectByRole(role) {
+    if (role === 'teacher') {
+      window.location.href = 'teacher-dashboard.html';
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  }
+
   // ---------- Sign in ----------
   if (signInBtn) signInBtn.dataset.originalText = signInBtn.textContent;
   if (signInForm) {
@@ -125,7 +134,10 @@
           }
           return;
         }
-        window.location.href = 'dashboard.html';
+
+        // Redirect based on role from profile
+        var role = data.user.user_metadata.role || 'student';
+        redirectByRole(role);
       });
     });
   }
@@ -141,6 +153,7 @@
       var email = (document.getElementById('signupEmail').value || '').trim();
       var password = document.getElementById('signupPassword').value || '';
       var confirm = document.getElementById('signupConfirmPassword').value || '';
+      var role = document.getElementById('signupRole').value;
 
       if (!fullName) { showError(document.getElementById('signupFullName'), 'Enter your full name'); return; }
       if (!email) { showError(document.getElementById('signupEmail'), 'Enter your email address'); return; }
@@ -159,7 +172,7 @@
       sb.auth.signUp({
         email: email,
         password: password,
-        options: { data: { full_name: fullName } }
+        options: { data: { full_name: fullName, role: role } }
       }).then(function (_ref) {
         var data = _ref.data;
         var error = _ref.error;
@@ -186,7 +199,7 @@
           return;
         }
 
-        window.location.href = 'dashboard.html';
+        redirectByRole(role);
       });
     });
   }
@@ -205,7 +218,6 @@
         alert('OAuth sign-in not yet configured: ' + (error.message || error));
         console.error('OAuth error:', error);
       }
-      // On success, Supabase redirects to login.html and handles the session automatically.
     });
   }
 
@@ -233,6 +245,9 @@
   // ---------- Auto-redirect if already signed in ----------
   sb.auth.getSession().then(function (_ref) {
     var session = _ref.data.session;
-    if (session) window.location.href = 'dashboard.html';
+    if (session) {
+      var role = session.user.user_metadata.role || 'student';
+      redirectByRole(role);
+    }
   });
 })();

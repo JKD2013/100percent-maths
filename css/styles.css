@@ -2618,3 +2618,211 @@ img, svg { display: block; }
   .task-content { padding: 24px; }
   .question-progress { padding: 16px 20px; }
 }
+
+/* ============================================================
+   TEACHER DASHBOARD — groups, assignments, students
+   ============================================================ */
+
+.create-group-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 24px;
+}
+
+.group-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.group-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.group-name {
+  font-weight: 700;
+  color: var(--snow);
+  font-size: 1rem;
+}
+
+.group-member-count {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.group-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.student-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.student-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.student-info {
+  flex: 1;
+}
+
+.student-name {
+  font-weight: 600;
+  color: var(--snow);
+}
+
+.student-email {
+  font-size: 0.6875rem;
+  color: var(--fog);
+  letter-spacing: 0.08em;
+}
+
+.student-actions {
+  flex-shrink: 0;
+}
+
+.assignment-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.assignment-info {
+  flex: 1;
+}
+
+.assignment-title {
+  font-weight: 700;
+  color: var(--snow);
+  margin-bottom: 6px;
+}
+
+.assignment-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.6875rem;
+  color: var(--fog);
+  letter-spacing: 0.08em;
+}
+
+.assignment-status {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.assignment-actions {
+  flex-shrink: 0;
+}
+
+.question-select-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+
+.question-select-card:hover {
+  border-color: var(--line-strong);
+}
+
+.question-select-card.selected {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.question-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.question-code {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.question-select-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.question-prompt {
+  font-size: 0.75rem;
+  color: var(--snow);
+}
+
+.question-answer {
+  font-size: 0.6875rem;
+  color: var(--fog);
+  font-family: var(--font-mono);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--fog);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Teacher header back link */
+header .nav-link {
+  margin-right: 24px;
+  color: var(--fog);
+}
+header .nav-link:hover {
+  color: var(--gold);
+}
+
+/* Responsive for teacher pages */
+@media (max-width: 768px) {
+  .task-layout, .dashboard-content {
+    grid-template-columns: 1fr !important;
+  }
+  .group-actions {
+    flex-direction: column;
+  }
+  .question-select-card {
+    padding: 12px;
+  }
+}
