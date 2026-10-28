@@ -180,6 +180,22 @@
           <p>No completed tasks yet.</p>
         </div>
       </div>
+
+      <!-- Badges -->
+      <div class="dashboard-section">
+        <div class="section-header-dashboard">
+          <div class="section-title-dashboard">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="7"></circle>
+              <polyline points="8.21 13.89 7 23 12 17 17 23 15.79 13.88"></polyline>
+            </svg>
+            Badges Earned
+          </div>
+        </div>
+        <div class="badges-list" id="badgesList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -205,6 +221,39 @@
       });
     }
   </script>
+
+  
+<script>
+  // Load badges for dashboard
+  (function() {
+    if (typeof sb === 'undefined') return;
+    requireSession(function(session) {
+      sb.from('user_badges')
+        .select('badge_id')
+        .eq('student_id', session.user.id)
+        .then(function(ref) {
+          var earnedBadgeIds = (ref.data || []).map(function(b) { return b.badge_id; });
+          sb.from('badges').select('*').then(function(ref2) {
+            var allBadges = ref2.data || [];
+            var list = document.getElementById('badgesList');
+            if (!list) return;
+            list.innerHTML = '';
+            allBadges.forEach(function(badge) {
+              var earned = earnedBadgeIds.includes(badge.id);
+              var card = document.createElement('div');
+              card.className = 'badge-card ' + (earned ? 'earned' : 'badge-locked');
+              card.innerHTML =
+                '<div class="badge-icon">' + (badge.icon || '🏅') + '</div>' +
+                '<div class="badge-name">' + (badge.name || '') + '</div>' +
+                '<div class="badge-description">' + (badge.description || '') + '</div>' +
+                '<div class="badge-criteria">' + badge.criteria_value + ' required</div>';
+              list.appendChild(card);
+            });
+          });
+        });
+    });
+  })();
+</script>
 
   </body>
 </html>
