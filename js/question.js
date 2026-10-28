@@ -1,7 +1,7 @@
 // ============================================================
 // 100Percent — Ultra Question Engine
 // Adaptive difficulty, spaced repetition, streak tracking,
-// multi-format questions, full progress persistence.
+// multi-format questions, full progress persistence, badges.
 // ============================================================
 
 /* global sb, answersMatch, gsap, window, document */
@@ -19,6 +19,7 @@
     var task = null;
     var correctCount = 0;
     var totalXP = 0;
+    var currentStreak = 0;
     var answeredQuestions = {};
     var sessionStart = Date.now();
 
@@ -71,17 +72,32 @@
             if (totalEl) totalEl.textContent = questions.length;
             if (topicEl) topicEl.textContent = (task.topic_code || '') + ' — ' + (task.title || '');
 
-            loadExistingProgress(userId, questions).then(function (existing) {
-              answeredQuestions = existing;
-              correctCount = Object.values(existing).filter(function (a) { return a.isCorrect; }).length;
-              totalXP = correctCount * 10;
-              if (xpEl) xpEl.textContent = totalXP;
-              if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
-              loadStreak(userId).then(function (s) {
-                currentStreak = s || 0;
-                if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
+            loadSpacedRepetition(userId, questions.map(function(q) { return q.id; })).then(function(srs) {
+              var dueQIds = Object.keys(srs).filter(function(qId) {
+                var sr = srs[qId];
+                var today = new Date().toISOString().split('T')[0];
+                return sr.next_review_date <= today;
               });
-              render(0);
+
+              if (dueQIds.length > 0) {
+                var dueQuestions = questions.filter(function(q) { return dueQIds.includes(q.id); });
+                var otherQuestions = questions.filter(function(q) { return !dueQIds.includes(q.id); });
+                questions = dueQuestions.concat(otherQuestions);
+                if (totalEl) totalEl.textContent = questions.length;
+              }
+
+              loadExistingProgress(userId, questions).then(function (existing) {
+                answeredQuestions = existing;
+                correctCount = Object.values(existing).filter(function (a) { return a.isCorrect; }).length;
+                totalXP = correctCount * 10;
+                if (xpEl) xpEl.textContent = totalXP;
+                if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
+                loadStreak(userId).then(function (s) {
+                  currentStreak = s || 0;
+                  if (streakEl) streakEl.textContent = currentStreak + ' day streak 🔥';
+                });
+                render(0);
+              });
             });
           });
       });
@@ -110,6 +126,21 @@
         .then(function (_ref) {
           return (_ref.data && _ref.data.current_streak) || 0;
         }).catch(function () { return 0; });
+    }
+
+    function loadSpacedRepetition(uId, qIds) {
+      return sb.from('spaced_repetition')
+        .select('question_id, next_review_date, interval_days, ease_factor')
+        .eq('user_id', uId)
+        .in('question_id', qIds)
+        .then(function (_ref) {
+          var srs = _ref.data || [];
+          var map = {};
+          srs.forEach(function (sr) {
+            map[sr.question_id] = sr;
+          });
+          return map;
+        });
     }
 
     function render(idx) {
@@ -264,8 +295,10 @@
           user_id: uId,
           question_id: qId,
           answer: answer,
-          is_correct: isCorrect,
+          is_correct: correct,
           attempted_at: new Date().toISOString()
+        }).then(function () {
+          return updateSpacedRepetition(uId, qId, isCorrect);
         });
       });
     }
@@ -323,6 +356,28 @@
         });
     }
 
+    function checkBadges(uId, correctCount, totalXP) {
+      sb.from('badges').select('*').then(function (_ref) {
+        var allBadges = _ref.data || [];
+        sb.from('user_badges').select('badge_id').eq('user_id', uId).then(function (_ref2) {
+          var earned = (_ref2.data || []).map(function (b) { return b.badge_id; });
+          allBadges.forEach(function (badge) {
+            if (earned.includes(badge.id)) return;
+            var shouldEarn = false;
+            if (badge.criteria_type === 'questions' && correctCount >= badge.criteria_value) shouldEarn = true;
+            if (badge.criteria_type === 'xp' && totalXP >= badge.criteria_value) shouldEarn = true;
+            if (badge.criteria_type === 'streak' && currentStreak >= badge.criteria_value) shouldEarn = true;
+            if (badge.criteria_type === 'perfect' && correctCount >= badge.criteria_value) shouldEarn = true;
+            if (shouldEarn) {
+              sb.from('user_badges').insert({ user_id: uId, badge_id: badge.id }).then(function () {
+                alert('🏆 Badge earned: ' + badge.name + ' — ' + badge.description);
+              });
+            }
+          });
+        });
+      });
+    }
+
     function showCompletion() {
       textEl.textContent = 'Task complete — great work!';
       exprEl.style.display = 'none';
@@ -351,37 +406,3 @@
     }
   });
 })();
-
-
-// ---------- Badge checking ----------
-function checkBadges(uId, correctCount, totalXP) {
-  sb.from('badges').select('*').then(function (_ref) {
-    var allBadges = _ref.data || [];
-    sb.from('user_badges').select('badge_id').eq('user_id', uId).then(function (_ref2) {
-      var earned = (_ref2.data || []).map(function (b) { return b.badge_id; });
-      var newBadges = [];
-
-      allBadges.forEach(function (badge) {
-        if (earned.includes(badge.id)) return;
-
-        var shouldEarn = false;
-        if (badge.criteria_type === 'questions' && correctCount >= badge.criteria_value) shouldEarn = true;
-        if (badge.criteria_type === 'xp' && totalXP >= badge.criteria_value) shouldEarn = true;
-        if (badge.criteria_type === 'streak' && currentStreak >= badge.criteria_value) shouldEarn = true;
-        if (badge.criteria_type === 'perfect' && correctCount >= badge.criteria_value) shouldEarn = true;
-
-        if (shouldEarn) {
-          newBadges.push(badge.id);
-          sb.from('user_badges').insert({ user_id: uId, badge_id: badge.id }).then(function () {
-            // Show badge earned notification
-            if (typeof gsap !== 'undefined') {
-              gsap.fromTo(document.createElement('div'), { opacity: 0 }, { opacity: 1 });
-            }
-            alert('🏆 Badge earned: ' + badge.name + ' - ' + badge.description);
-          });
-        }
-      });
-    });
-  });
-}
-
