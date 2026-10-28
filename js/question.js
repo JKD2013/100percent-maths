@@ -226,8 +226,15 @@
             updateStreak(userId).then(function (newStreak) {
               currentStreak = newStreak;
               if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
+              checkBadges(userId, correctCount, totalXP);
             });
           });
+        } else {
+          updateStreak(userId).then(function (newStreak) {
+            currentStreak = newStreak;
+            if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
+          });
+          checkBadges(userId, correctCount, totalXP);
         }
       });
 
@@ -344,3 +351,37 @@
     }
   });
 })();
+
+
+// ---------- Badge checking ----------
+function checkBadges(uId, correctCount, totalXP) {
+  sb.from('badges').select('*').then(function (_ref) {
+    var allBadges = _ref.data || [];
+    sb.from('user_badges').select('badge_id').eq('user_id', uId).then(function (_ref2) {
+      var earned = (_ref2.data || []).map(function (b) { return b.badge_id; });
+      var newBadges = [];
+
+      allBadges.forEach(function (badge) {
+        if (earned.includes(badge.id)) return;
+
+        var shouldEarn = false;
+        if (badge.criteria_type === 'questions' && correctCount >= badge.criteria_value) shouldEarn = true;
+        if (badge.criteria_type === 'xp' && totalXP >= badge.criteria_value) shouldEarn = true;
+        if (badge.criteria_type === 'streak' && currentStreak >= badge.criteria_value) shouldEarn = true;
+        if (badge.criteria_type === 'perfect' && correctCount >= badge.criteria_value) shouldEarn = true;
+
+        if (shouldEarn) {
+          newBadges.push(badge.id);
+          sb.from('user_badges').insert({ user_id: uId, badge_id: badge.id }).then(function () {
+            // Show badge earned notification
+            if (typeof gsap !== 'undefined') {
+              gsap.fromTo(document.createElement('div'), { opacity: 0 }, { opacity: 1 });
+            }
+            alert('🏆 Badge earned: ' + badge.name + ' - ' + badge.description);
+          });
+        }
+      });
+    });
+  });
+}
+
