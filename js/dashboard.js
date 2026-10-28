@@ -16,14 +16,22 @@
     var userId = session.user.id;
 
     // ---------- DOM ----------
-    var nameEl = document.querySelector('.user-name-dashboard');
-    var schoolEl = document.querySelector('.user-school');
-    var avatarEl = document.querySelector('.user-avatar-lg');
-    var xpEl = document.getElementById('statXp');
-    var streakEl = document.getElementById('statStreak');
-    var masteryEl = document.getElementById('statMastery');
-    var trophyCountEl = document.getElementById('trophyCount');
-    var trophiesGrid = document.getElementById('trophiesGrid');
+    var railAvatar = document.getElementById('railAvatar');
+    var railName = document.getElementById('railName');
+    var statXp = document.getElementById('statXp');
+    var statLevel = document.getElementById('statLevel');
+    var statStreak = document.getElementById('statStreak');
+    var statMastery = document.getElementById('statMastery');
+    var railTrophyCount = document.getElementById('railTrophyCount');
+    var railTrophies = document.getElementById('railTrophies');
+    var railTaskEmpty = document.getElementById('railTaskEmpty');
+    var railTaskActive = document.getElementById('railTaskActive');
+    var railTaskTitle = document.getElementById('railTaskTitle');
+    var railTaskBtn = document.getElementById('railTaskBtn');
+    var masteryGrid = document.getElementById('masteryGrid');
+    var tasksList = document.getElementById('tasksList');
+    var badgesList = document.getElementById('badgesList');
+    var emptyHistory = document.getElementById('emptyHistory');
 
     var profileData = {};
 
@@ -38,38 +46,33 @@
 
         profileData = profile;
 
-        if (nameEl) nameEl.textContent = profile.full_name || 'Student';
-        if (schoolEl) schoolEl.textContent = profile.school || "Gordon's School";
-        if (avatarEl) avatarEl.textContent = (profile.full_name || 'S').charAt(0).toUpperCase();
-        if (xpEl) xpEl.textContent = profile.xp.toLocaleString();
-        if (streakEl) streakEl.textContent = profile.streak + ' days';
-        if (trophyCountEl) trophyCountEl.textContent = profile.trophies;
+        if (railName) railName.textContent = profile.full_name || 'Student';
+        if (railAvatar) railAvatar.textContent = (profile.full_name || 'S').charAt(0).toUpperCase();
+        if (statXp) statXp.textContent = (profile.xp || 0).toLocaleString();
+        if (statLevel) statLevel.textContent = Math.floor((profile.xp || 0) / 100) + 1;
+        if (statStreak) statStreak.textContent = (profile.streak || 0);
+        if (statMastery) statMastery.textContent = '0%';
+        if (railTrophyCount) railTrophyCount.textContent = (profile.trophies || 0);
 
-        // wire nav user info too
-        var navName = document.querySelector('.user-name');
-        var navSchool = document.querySelector('.user-school');
-        if (navName) navName.textContent = profile.full_name || 'Student';
-        if (navSchool) navSchool.textContent = profile.school || "Gordon's School";
-
-        renderTrophies(profile.trophies);
+        renderTrophies(profile.trophies || 0);
       });
 
     // ---------- Trophies / Achievements ----------
     function renderTrophies(earnedCount) {
-      if (!trophiesGrid) return;
-      var total = 37;
+      if (!railTrophies) return;
+      var total = 7;
       var earned = Math.min(Math.max(earnedCount || 0, 0), total);
 
-      trophiesGrid.innerHTML = '';
+      railTrophies.innerHTML = '';
       for (var i = 1; i <= total; i++) {
         var card = document.createElement('div');
-        card.className = 'trophy-card ' + (i <= earned ? 'earned' : 'locked');
+        card.className = 'rail-trophy-card ' + (i <= earned ? 'earned' : 'locked');
         card.innerHTML = i <= earned ? '\u2605' : '';
-        trophiesGrid.appendChild(card);
+        railTrophies.appendChild(card);
       }
 
       if (typeof gsap !== 'undefined') {
-        gsap.fromTo('.trophy-card.earned',
+        gsap.fromTo('.rail-trophy-card.earned',
           { scale: 0.8, opacity: 0 },
           { scale: 1, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'back.out(1.7)' }
         );
@@ -99,18 +102,11 @@
 
     // ---------- Render assignments with progress ----------
     function renderAssignments(groups) {
-      var tasksList = document.getElementById('tasksList');
-      var emptyHistory = document.getElementById('emptyHistory');
-      var nextWorkEmpty = document.getElementById('nextWorkEmpty');
-      var nextWorkActive = document.getElementById('nextWorkActive');
-      var openTaskBtn = document.getElementById('openTaskBtn');
-      var activeTaskTitle = document.getElementById('activeTaskTitle');
-
       if (!groups || groups.length === 0) {
         if (tasksList) tasksList.innerHTML = '';
         if (emptyHistory) emptyHistory.style.display = 'block';
-        if (nextWorkEmpty) nextWorkEmpty.style.display = 'block';
-        if (nextWorkActive) nextWorkActive.style.display = 'none';
+        if (railTaskEmpty) railTaskEmpty.style.display = 'block';
+        if (railTaskActive) railTaskActive.style.display = 'none';
         return;
       }
 
@@ -167,15 +163,10 @@
     }
 
     function renderAssignmentsUI(assignments, aqs, qProgress) {
-      var tasksList = document.getElementById('tasksList');
-      var nextWorkEmpty = document.getElementById('nextWorkEmpty');
-      var nextWorkActive = document.getElementById('nextWorkActive');
-      var openTaskBtn = document.getElementById('openTaskBtn');
-      var activeTaskTitle = document.getElementById('activeTaskTitle');
-
       if (!tasksList) return;
 
       tasksList.innerHTML = '';
+      var firstAssignment = null;
 
       assignments.forEach(function (assignment) {
         // Get questions for this assignment
@@ -197,9 +188,12 @@
         var pct = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
         var isComplete = totalQuestions > 0 && answeredCount === totalQuestions;
 
+        if (!firstAssignment) firstAssignment = assignment;
+
         var card = document.createElement('div');
         card.className = 'task-item';
         card.innerHTML =
+          '<div class="task-icon">Q</div>' +
           '<div class="task-info">' +
           '  <div class="task-title">' + escapeHtml(assignment.title) + '</div>' +
           '  <div class="task-meta">' + answeredCount + '/' + totalQuestions + ' questions answered</div>' +
@@ -213,68 +207,55 @@
         tasksList.appendChild(card);
       });
 
-      // Show first assignment as active work
-      if (assignments.length > 0) {
-        if (nextWorkEmpty) nextWorkEmpty.style.display = 'none';
-        if (nextWorkActive) nextWorkActive.style.display = 'block';
-        if (openTaskBtn) {
-          openTaskBtn.onclick = function () {
+      // Show first assignment as active work in rail
+      if (firstAssignment) {
+        if (railTaskEmpty) railTaskEmpty.style.display = 'none';
+        if (railTaskActive) railTaskActive.style.display = 'block';
+        if (railTaskTitle) railTaskTitle.textContent = firstAssignment.title || '—';
+        if (railTaskBtn) {
+          railTaskBtn.onclick = function () {
             window.location.href = 'question.html';
           };
         }
-        if (activeTaskTitle) activeTaskTitle.textContent = assignments[0].title || '—';
       }
     }
 
     // ---------- Mastery per topic ----------
     function renderMastery(userId) {
-      var bars = [
-        { el: document.querySelector('.mastery-bar.mastery-1'), topic: '394h', label: 'Negative & Fractional Indices' },
-        { el: document.querySelector('.mastery-bar.mastery-2'), topic: '214n', label: 'Algebraic Fractions' },
-        { el: document.querySelector('.mastery-bar.mastery-3'), topic: '552p', label: 'Surds' }
+      var topics = [
+        { code: '394h', label: 'Negative & Fractional Indices' },
+        { code: '214n', label: 'Algebraic Fractions' },
+        { code: '552p', label: 'Surds' }
       ];
 
-      sb.from('questions')
-        .select('id, task_id')
-        .then(function (_ref) {
-          var questions = _ref.data || [];
-          var taskIds = questions.map(function (q) { return q.task_id; }).filter(Boolean);
-          if (!taskIds.length) {
-            bars.forEach(function (b) {
-              if (b.el) {
-                var fill = b.el.querySelector('div');
-                if (fill) fill.style.width = '0%';
-                var labelEl = b.el.parentNode.querySelector('.mastery-label-row');
-                if (labelEl) labelEl.children[1].textContent = '0%';
-              }
-            });
-            return;
-          }
-          sb.from('tasks')
-            .select('id, topic_code')
-            .in('id', taskIds)
-            .then(function (_ref2) {
-              var tasks = _ref2.data || [];
-              var taskTopic = {};
-              tasks.forEach(function (t) { taskTopic[t.id] = t.topic_code; });
-              var byTopic = {};
-              questions.forEach(function (q) {
-                var code = taskTopic[q.task_id] || 'unknown';
-                byTopic[code] = byTopic[code] || [];
-                byTopic[code].push(q.id);
-              });
-              bars.forEach(function (bar) {
-                if (!bar.el) return;
-                var qIds = byTopic[bar.topic] || [];
-                var fill = bar.el.querySelector('div');
-                var labelEl = bar.el.parentNode.querySelector('.mastery-label-row');
-                var pctText = labelEl ? labelEl.children[1] : null;
+      masteryGrid.innerHTML = '';
+      topics.forEach(function (topic) {
+        var row = document.createElement('div');
+        row.className = 'mastery-row';
+        row.innerHTML =
+          '<div class="mastery-label-row">' +
+          '  <span>' + escapeHtml(topic.label) + '</span>' +
+          '  <span>0%</span>' +
+          '</div>' +
+          '<div class="mastery-bar"><div></div></div>';
+        masteryGrid.appendChild(row);
 
-                if (!qIds.length) {
-                  if (fill) fill.style.width = '0%';
-                  if (pctText) pctText.textContent = '0%';
-                  return;
-                }
+        sb.from('questions')
+          .select('id, task_id')
+          .then(function (_ref) {
+            var questions = _ref.data || [];
+            var taskIds = questions.map(function (q) { return q.task_id; }).filter(Boolean);
+            if (!taskIds.length) return;
+            sb.from('tasks')
+              .select('id, topic_code')
+              .in('id', taskIds)
+              .then(function (_ref2) {
+                var tasks = _ref2.data || [];
+                var taskTopic = {};
+                tasks.forEach(function (t) { taskTopic[t.id] = t.topic_code; });
+                var qIds = questions.filter(function (q) { return taskTopic[q.task_id] === topic.code; }).map(function (q) { return q.id; });
+
+                if (!qIds.length) return;
                 sb.from('attempts')
                   .select('is_correct')
                   .eq('user_id', userId)
@@ -283,21 +264,48 @@
                     var attempts = _ref3.data || [];
                     var correct = attempts.filter(function (a) { return a.is_correct; }).length;
                     var pct = attempts.length ? Math.round((correct / attempts.length) * 100) : 0;
+                    var fill = row.querySelector('.mastery-bar > div');
+                    var labelSpan = row.querySelector('.mastery-label-row span:last-child');
                     if (fill) {
                       fill.style.width = '0%';
                       setTimeout(function () {
-                        fill.classList.add('filled');
                         fill.style.width = pct + '%';
                       }, 50);
                     }
-                    if (pctText) pctText.textContent = pct + '%';
+                    if (labelSpan) labelSpan.textContent = pct + '%';
                   });
               });
-            });
-        });
+          });
+      });
     }
 
     renderMastery(userId);
+
+    // ---------- Badges ----------
+    sb.from('user_badges')
+      .select('badge_id')
+      .eq('user_id', userId)
+      .then(function (_ref) {
+        var earnedBadgeIds = (_ref.data || []).map(function (b) { return b.badge_id; });
+
+        sb.from('badges').select('*').then(function (_ref2) {
+          var allBadges = _ref2.data || [];
+          if (!badgesList) return;
+          badgesList.innerHTML = '';
+
+          allBadges.forEach(function (badge) {
+            var earned = earnedBadgeIds.includes(badge.id);
+            var card = document.createElement('div');
+            card.className = 'badge-card ' + (earned ? 'earned' : 'badge-locked');
+            card.innerHTML =
+              '<div class="badge-icon">' + (badge.icon || '\u2605') + '</div>' +
+              '<div class="badge-name">' + escapeHtml(badge.name) + '</div>' +
+              '<div class="badge-description">' + escapeHtml(badge.description) + '</div>' +
+              '<div class="badge-criteria">' + badge.criteria_value + ' required</div>';
+            badgesList.appendChild(card);
+          });
+        });
+      });
   });
 
   function escapeHtml(text) {

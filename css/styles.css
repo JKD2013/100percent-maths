@@ -1608,6 +1608,213 @@ img, svg { display: block; }
 }
 
 /* ============================================================
+   DASHBOARD APP — left rail + right content (HUD instrumentation)
+   ============================================================ */
+
+.dashboard-app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: var(--abyss);
+}
+
+.dashboard-rail {
+  border-right: 1px solid var(--line);
+  padding: 40px 28px;
+  background: var(--deep);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-main {
+  padding: 40px 48px 48px;
+  min-width: 0;
+}
+
+.dashboard-container {
+  max-width: 800px;
+}
+
+.rail-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+
+.rail-avatar {
+  width: 36px; height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.rail-info { min-width: 0; }
+.rail-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--snow);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rail-school {
+  font-size: 0.625rem;
+  color: var(--fog);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rail-stats { display: flex; flex-direction: column; gap: 20px; }
+.rail-stat { display: flex; flex-direction: column; gap: 6px; }
+.rail-stat-label {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+.rail-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--snow);
+  font-variant-numeric: tabular-nums;
+}
+.rail-stat-value.gold { color: var(--gold); }
+
+.rail-divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 8px 0;
+}
+
+.rail-section-title {
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.rail-tasks { display: flex; flex-direction: column; gap: 12px; }
+.rail-task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+.rail-task-number {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--gold);
+  width: 28px;
+  flex-shrink: 0;
+}
+.rail-task-info { flex: 1; min-width: 0; }
+.rail-task-title {
+  font-size: 0.8125rem;
+  color: var(--snow);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.rail-task-btn {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  transition: all var(--t-fast) var(--ease);
+  flex-shrink: 0;
+}
+.rail-task-btn:hover { background: var(--gold); color: var(--abyss); }
+
+.rail-section { display: flex; flex-direction: column; gap: 12px; }
+
+.rail-trophies {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.rail-trophy-card {
+  width: 40px; height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--fog);
+  transition: all var(--t-fast) var(--ease);
+}
+.rail-trophy-card.locked { opacity: 0.4; filter: grayscale(1); }
+.rail-trophy-card.earned {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.rail-trophy-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--snow);
+}
+.rail-trophy-label {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.rail-signout {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--fog);
+  border-radius: var(--r-sm);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 10px;
+  transition: all var(--t-fast) var(--ease);
+  margin-top: 8px;
+}
+.rail-signout:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -1624,6 +1831,146 @@ img, svg { display: block; }
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Section headers (dashboard main content) */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.section-kicker {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--snow);
+  letter-spacing: -0.01em;
+}
+
+/* Mastery grid */
+.mastery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.mastery-row {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mastery-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--fog);
+}
+.mastery-bar {
+  height: 4px;
+  background: var(--surface);
+  border-radius: 0;
+  overflow: hidden;
+}
+.mastery-bar > div {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.8s var(--ease);
+}
+
+/* Tasks list */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 12px;
+  border-bottom: 1px solid var(--line);
+  transition: background var(--t-fast) var(--ease);
+}
+.task-item:hover { background: rgba(14, 27, 44, 0.55); }
+.task-icon {
+  width: 34px; height: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.task-info { flex: 1; min-width: 0; }
+.task-title {
+  font-size: 0.875rem;
+  color: var(--snow);
+  font-weight: 500;
+}
+.task-meta {
+  font-size: 0.625rem;
+  color: var(--fog);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Badges list (dashboard) */
+.badges-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+.badge-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  text-align: center;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.badge-card.earned { border-color: var(--gold); }
+.badge-card.badge-locked { opacity: 0.4; filter: grayscale(1); }
+.badge-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.badge-name {
+  font-weight: 700;
+  color: var(--snow);
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+}
+.badge-description {
+  font-size: 0.7rem;
+  color: var(--fog);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.badge-criteria {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+@media (max-width: 768px) {
+  .dashboard-app { grid-template-columns: 1fr; }
+  .dashboard-rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .dashboard-main { padding: 24px; }
 }
 
 /* ============================================================

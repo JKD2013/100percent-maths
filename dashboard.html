@@ -12,191 +12,122 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-inner">
+  <!-- Fixed HUD -->
+  <div class="hud">
+    <div class="hud-tl">
       <a href="index.html" class="logo">
         <div class="logo-mark">100</div>
-        <span>Percent</span>
+        <span class="logo-word">Percent</span>
       </a>
-
-      <nav class="main-nav">
-        <a href="for-teachers.html" class="nav-link">For Teachers</a>
-        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-        <a href="for-schools.html" class="nav-link">For Schools</a>
-        <a href="for-students.html" class="nav-link">For Students</a>
-        <a href="about-us.html" class="nav-link">About Us</a>
-        <a href="pricing.html" class="nav-link">Pricing</a>
-        <a href="contact-us.html" class="nav-link">Contact Us</a>
-      </nav>
-
-      <div class="header-actions">
-        <a href="https://github.com" class="btn-outline-nav btn-sm" target="_blank" rel="noopener noreferrer" title="View on GitHub">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-4.77 0-0.84-0.33-1.14-0.33-1.85h-0.05c-0.27-0.65-0.97-0.97-1.82-0.97-1.12 0-1.82 0.3-2.67 0.65v-2.03c-0.38 0.44-0.89 0.72-1.53 0.84-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.64-0.12-1.15-0.4-1.53-0.84v2.03c-0.85-0.35-1.55-0.65-2.67-0.65-0.85 0-1.55 0.32-1.82 0.97h-0.05c0-0.71-0.33-1.01-0.33-1.85 0-3.23 3.3-4.42 6.44-4.77a3.37 3.37 0 0 0-.94 2.61v3.87a3 3 0 0 1-0.94 2.91c-0.94 0.25-1.82 0.49-2.67 0.65-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0-.94 2.91v3.87a3 3 0 0 1 0.94 2.91c0.94 0.25 1.82 0.49 2.67 0.65 0.32 0.06 0.65 0.06 0.97 0.06 0.32 0 0.65-0.06 0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87a3 3 0 0 1 0.94-2.91c0.85 0.25 1.72 0.49 2.67 0.65 0.32 0.06 0.65 0.06 0.97 0.06 0.32 0 0.65-0.06 0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87a3 3 0 0 1 0.94-2.91c0.94-0.25 1.82 0.49 2.67 0.65 0.32-0.06 0.65-0.06 0.97-0.06 0.32 0 0.65 0.06 0.97 0.06 0.85 0 1.55-0.32 1.82-0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87z"></path>
-          </svg>
-        </a>
-        <button class="btn btn-primary btn-sm signout-btn" onclick="signOut()" style="margin-left: 12px;">
-          Sign Out
-        </button>
-        <div class="header-user">
-          <span class="user-name">Jai</span>
-          <div class="user-avatar">J</div>
-        </div>
-        <button class="mobile-menu-btn" aria-label="Toggle menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-      </div>
     </div>
-  </header>
-
-  <!-- Dashboard Page -->
-  <div class="dashboard-page">
-    <div class="dashboard-header">
-      <div class="user-profile">
-        <div class="user-avatar-lg">J</div>
-        <div class="user-info">
-          <div class="user-name-dashboard">Demo Student</div>
-          <div class="user-school">Gordon's School</div>
-        </div>
-      </div>
-
-      <!-- Student stats -->
-      <div class="dashboard-stats">
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">XP</div>
-          <div class="dashboard-stat-value gold" id="statXp">0</div>
-        </div>
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">Streak</div>
-          <div class="dashboard-stat-value" id="statStreak">0 days</div>
-        </div>
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">Mastery</div>
-          <div class="dashboard-stat-value" id="statMastery">0%</div>
-        </div>
-      </div>
+    <div class="hud-tr">
+      <a href="leaderboard.html" class="hud-nav">Leaderboard</a>
+      <a href="question-bank.html" class="hud-nav">Question Bank</a>
+      <a href="https://github.com/JKD2013/100percent-maths" target="_blank" rel="noopener noreferrer" class="hud-nav hud-nav-github">GitHub</a>
     </div>
-
-    <div class="dashboard-content">
-      <!-- Join Group Section -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
-            Join a Group
-          </div>
-        </div>
-        <div class="join-group-card">
-          <div class="form-group">
-            <label class="form-label" for="joinGroupCode">Group Code</label>
-            <input type="text" class="form-input" id="joinGroupCode" placeholder="e.g. ABC123" maxlength="6" />
-          </div>
-          <button class="btn btn-primary btn-lg join-group-btn">Join Group</button>
-        </div>
-      </div>
-
-      <!-- Active task -->
-      <div class="dashboard-section next-work-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-            What to work on next?
-          </div>
-        </div>
-
-        <div class="next-work-empty" id="nextWorkEmpty" style="display:none;">
-          <p class="empty-state">You&rsquo;re all caught up — no active tasks right now.</p>
-        </div>
-
-        <div class="next-work-active" id="nextWorkActive">
-          <button class="practice-btn btn-bracket" id="openTaskBtn">Open task</button>
-          <div class="practice-item">
-            <div class="practice-number">1</div>
-            <div class="practice-title-item" id="activeTaskTitle">—</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mastery progress -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="12" y2="12"></line>
-              <line x1="12" y2="12" x2="6" y1="18"></line>
-            </svg>
-            Mastery by topic
-          </div>
-        </div>
-        <div class="mastery-stats" id="masteryStats">
-          <div class="mastery-1">
-            <div class="mastery-label-row"><span>Negative &amp; Fractional</span><span>0%</span></div>
-            <div class="mastery-bar"><div></div></div>
-          </div>
-          <div class="mastery-2">
-            <div class="mastery-label-row"><span>Algebraic Fractions</span><span>0%</span></div>
-            <div class="mastery-bar"><div></div></div>
-          </div>
-          <div class="mastery-3">
-            <div class="mastery-label-row"><span>Surds</span><span>0%</span></div>
-            <div class="mastery-bar"><div></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Task history -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="16" y1="2" x2="16" y2="22"></line>
-              <line x1="8" y1="2" x2="8" y2="22"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-              <line x1="12" y1="10" x2="12" y2="22"></line>
-            </svg>
-            Completed tasks
-          </div>
-          <div class="section-actions">
-            <a href="#" class="btn btn-sm btn-secondary">View all</a>
-          </div>
-        </div>
-
-        <div class="tasks-list" id="tasksList">
-          <!-- Populated by JS -->
-        </div>
-        <div class="empty-state" id="emptyHistory" style="display:none; text-align:center; padding: 40px;">
-          <p>No completed tasks yet.</p>
-        </div>
-      </div>
-
-      <!-- Badges -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="7"></circle>
-              <polyline points="8.21 13.89 7 23 12 17 17 23 15.79 13.88"></polyline>
-            </svg>
-            Badges Earned
-          </div>
-        </div>
-        <div class="badges-list" id="badgesList">
-          <!-- Populated by JS -->
-        </div>
-      </div>
+    <div class="hud-bl">
+      <span class="mono-label">02 <span class="cue-arrow">▾</span></span>
     </div>
+    <div class="hud-br">
+      <span class="dot"></span><span class="mono-label">Session active</span>
+    </div>
+  </div>
+
+  <!-- Dashboard — left rail instrumentation, right content -->
+  <div class="dashboard-app">
+    <aside class="dashboard-rail">
+      <div class="rail-user">
+        <div class="rail-avatar" id="railAvatar">S</div>
+        <div class="rail-info">
+          <div class="rail-name" id="railName">Student</div>
+          <div class="rail-school">Gordon's School</div>
+        </div>
+      </div>
+
+      <div class="rail-stats">
+        <div class="rail-stat">
+          <div class="rail-stat-label">XP</div>
+          <div class="rail-stat-value gold" id="statXp">0</div>
+        </div>
+        <div class="rail-stat">
+          <div class="rail-stat-label">Level</div>
+          <div class="rail-stat-value" id="statLevel">1</div>
+        </div>
+        <div class="rail-stat">
+          <div class="rail-stat-label">Streak</div>
+          <div class="rail-stat-value" id="statStreak">0</div>
+        </div>
+        <div class="rail-stat">
+          <div class="rail-stat-label">Mastery</div>
+          <div class="rail-stat-value" id="statMastery">0%</div>
+        </div>
+      </div>
+
+      <div class="rail-divider"></div>
+
+      <div class="rail-tasks">
+        <div class="rail-section-title">Next</div>
+        <div class="rail-task" id="railTaskEmpty" style="display:none;">
+          <div class="rail-task-title">No active task</div>
+        </div>
+        <div class="rail-task" id="railTaskActive">
+          <div class="rail-task-number">01</div>
+          <div class="rail-task-info">
+            <div class="rail-task-title" id="railTaskTitle">—</div>
+            <button class="rail-task-btn" id="railTaskBtn">Open task</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-divider"></div>
+
+      <div class="rail-section">
+        <div class="rail-section-title">Trophies</div>
+        <div class="rail-trophies" id="railTrophies"></div>
+        <div class="rail-trophy-count">
+          <span class="rail-trophy-label">Earned</span>
+          <span class="rail-trophy-value" id="railTrophyCount">0</span>
+        </div>
+      </div>
+
+      <button class="rail-signout" onclick="signOut()">Sign Out</button>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="dashboard-container">
+
+        <!-- Mastery by topic -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div class="section-kicker">Mastery</div>
+            <h2 class="section-title">Topics</h2>
+          </div>
+          <div class="mastery-grid" id="masteryGrid"></div>
+        </section>
+
+        <!-- Completed tasks -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div class="section-kicker">History</div>
+            <h2 class="section-title">Completed tasks</h2>
+          </div>
+          <div class="tasks-list" id="tasksList"></div>
+          <div class="empty-state" id="emptyHistory" style="display:none;">
+            <p>No completed tasks yet.</p>
+          </div>
+        </section>
+
+        <!-- Badges -->
+        <section class="dashboard-section">
+          <div class="section-header">
+            <div class="section-kicker">Badges</div>
+            <h2 class="section-title">Achievements</h2>
+          </div>
+          <div class="badges-list" id="badgesList"></div>
+        </section>
+
+      </div>
+    </main>
   </div>
 
   <!-- Libraries -->
