@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>100Percent - Question Bank Builder</title>
+  <title>100Percent - Question Bank</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,147 +12,135 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-inner">
+  <!-- Fixed HUD -->
+  <div class="hud">
+    <div class="hud-tl">
       <a href="teacher-dashboard.html" class="logo">
         <div class="logo-mark">100</div>
-        <span>Percent</span>
+        <span class="logo-word">Percent</span>
       </a>
-      <a href="teacher-dashboard.html" class="nav-link">← Back to Dashboard</a>
-
-      <div class="header-actions">
-        <a href="https://github.com" class="btn-outline-nav btn-sm" target="_blank" rel="noopener noreferrer" title="View on GitHub">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-4.77 0-0.84-0.33-1.14-0.33-1.85h-0.05c-0.27-0.65-0.97-0.97-1.82-0.97-1.12 0-1.82 0.3-2.67 0.65v-2.03c-0.38 0.44-0.89 0.72-1.53 0.84-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.64-0.12-1.15-0.4-1.53-0.84v2.03c-0.85-0.35-1.55-0.65-2.67-0.65-0.85 0-1.55 0.32-1.82 0.97h-0.05c0-0.71-0.33-1.01-0.33-1.85 0-3.23 3.3-4.42 6.44-4.77a3.37 3.37 0 0 0-.94 2.61v3.87a3 3 0 0 1-0.94 2.91c-0.94 0.25-1.82 0.49-2.67 0.65-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0-.94 2.91v3.87a3 3 0 0 1-0.94 2.91c0.94 0.25-1.82 0.49-2.67 0.65-0.32 0.06-0.65 0.06-0.97 0.06-0.32 0-0.65-0.06-0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87a3 3 0 0 1 0.94-2.91c0.85 0.25 1.72 0.49 2.67 0.65 0.32 0.06 0.65 0.06 0.97 0.06 0.32 0 0.65-0.06 0.97-0.06-0.85 0-1.55 0.32-1.82 0.65a3.37 3.37 0 0 0 0.94-2.91v-3.87z"></path>
-          </svg>
-        </a>
-        <button class="btn btn-primary btn-sm signout-btn" onclick="signOut()" style="margin-left: 12px;">
-          Sign Out
-        </button>
-      </div>
     </div>
-  </header>
-
-  <div class="dashboard-page">
-    <div class="dashboard-header">
-      <div class="user-profile">
-        <div class="user-avatar-lg">T</div>
-        <div class="user-info">
-          <div class="user-name-dashboard">Teacher</div>
-          <div class="user-school">Gordon's School</div>
-        </div>
-      </div>
-
-      <div class="dashboard-stats">
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">Questions Created</div>
-          <div class="dashboard-stat-value gold" id="statQuestionsCreated">0</div>
-        </div>
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">Public Questions</div>
-          <div class="dashboard-stat-value" id="statPublicQuestions">0</div>
-        </div>
-        <div class="dashboard-stat">
-          <div class="dashboard-stat-label">Private Questions</div>
-          <div class="dashboard-stat-value" id="statPrivateQuestions">0</div>
-        </div>
-      </div>
+    <div class="hud-tr">
+      <a href="leaderboard.html" class="hud-nav">Leaderboard</a>
+      <a href="https://github.com/JKD2013/100percent-maths" target="_blank" rel="noopener noreferrer" class="hud-nav hud-nav-github">GitHub</a>
     </div>
-
-    <div class="dashboard-content">
-      <!-- Create Question Form -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
-            Create Question
-          </div>
-        </div>
-        <div class="create-question-card">
-          <div class="form-group">
-            <label class="form-label" for="qbTopic">Topic</label>
-            <select class="form-input" id="qbTopic" required>
-              <option value="">Select topic...</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbExpression">Expression / Question</label>
-            <input type="text" class="form-input" id="qbExpression" placeholder="e.g. 3^-2 or √50" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbPrompt">Prompt / Instruction</label>
-            <input type="text" class="form-input" id="qbPrompt" placeholder="e.g. Evaluate." required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbAnswer">Correct Answer</label>
-            <input type="text" class="form-input" id="qbAnswer" placeholder="e.g. 1/9" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbHint">Hint (optional)</label>
-            <input type="text" class="form-input" id="qbHint" placeholder="Hint..." />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbExplanation">Explanation (optional)</label>
-            <input type="text" class="form-input" id="qbExplanation" placeholder="Why this is correct..." />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbDifficulty">Difficulty</label>
-            <select class="form-input" id="qbDifficulty">
-              <option value="1">1 - Easy</option>
-              <option value="2">2</option>
-              <option value="3" selected>3 - Medium</option>
-              <option value="4">4</option>
-              <option value="5">5 - Hard</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qbType">Question Type</label>
-            <select class="form-input" id="qbType">
-              <option value="text_input">Text Input</option>
-              <option value="multiple_choice">Multiple Choice</option>
-              <option value="true_false">True / False</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" style="display:flex; align-items:center; gap:8px;">
-              <input type="checkbox" id="qbPublic" />
-              <span>Make public (share with all teachers)</span>
-            </label>
-          </div>
-          <button class="btn btn-primary btn-lg create-question-btn" id="createQuestionBtn">
-            Create Question
-          </button>
-        </div>
-      </div>
-
-      <!-- My Questions List -->
-      <div class="dashboard-section">
-        <div class="section-header-dashboard">
-          <div class="section-title-dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="9" x2="21" y2="9"></line>
-            </svg>
-            My Question Bank
-          </div>
-        </div>
-        <div class="questions-bank-list" id="questionsBankList">
-          <!-- Populated by JS -->
-        </div>
-      </div>
+    <div class="hud-bl">
+      <span class="mono-label">06 <span class="cue-arrow">▾</span></span>
+    </div>
+    <div class="hud-br">
+      <span class="dot"></span><span class="mono-label">Authoring mode</span>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.3.27/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+  <!-- Question Bank Page -->
+  <div class="app-shell">
+    <div class="app-layout">
+      <aside class="app-rail">
+        <div class="rail-user">
+          <div class="rail-avatar" id="railAvatar">T</div>
+          <div class="rail-info">
+            <div class="rail-name" id="railName">Teacher</div>
+            <div class="rail-school">Gordon's School</div>
+          </div>
+        </div>
+
+        <div class="rail-stats">
+          <div class="rail-stat">
+            <div class="rail-stat-label">Created</div>
+            <div class="rail-stat-value gold" id="statQuestionsCreated">0</div>
+          </div>
+          <div class="rail-stat">
+            <div class="rail-stat-label">Public</div>
+            <div class="rail-stat-value" id="statPublicQuestions">0</div>
+          </div>
+          <div class="rail-stat">
+            <div class="rail-stat-label">Private</div>
+            <div class="rail-stat-value" id="statPrivateQuestions">0</div>
+          </div>
+        </div>
+
+        <div class="rail-divider"></div>
+
+        <button class="rail-signout" onclick="signOut()">Sign Out</button>
+      </aside>
+
+      <main class="app-main">
+        <div class="app-container">
+
+          <section class="page-section">
+            <div class="section-header">
+              <div class="section-kicker">Create</div>
+              <h2 class="section-title">New Question</h2>
+            </div>
+            <div class="create-card">
+              <div class="form-group">
+                <label class="form-label" for="qbTopic">Topic</label>
+                <select class="form-input" id="qbTopic" required>
+                  <option value="">Select topic&hellip;</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbExpression">Expression / Question</label>
+                <input type="text" class="form-input" id="qbExpression" placeholder="e.g. 3^-2 or √50" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbPrompt">Prompt / Instruction</label>
+                <input type="text" class="form-input" id="qbPrompt" placeholder="e.g. Evaluate." required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbAnswer">Correct Answer</label>
+                <input type="text" class="form-input" id="qbAnswer" placeholder="e.g. 1/9" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbHint">Hint (optional)</label>
+                <input type="text" class="form-input" id="qbHint" placeholder="Hint&hellip;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbExplanation">Explanation (optional)</label>
+                <input type="text" class="form-input" id="qbExplanation" placeholder="Why this is correct&hellip;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbDifficulty">Difficulty</label>
+                <select class="form-input" id="qbDifficulty">
+                  <option value="1">1 &mdash; Easy</option>
+                  <option value="2">2</option>
+                  <option value="3" selected>3 &mdash; Medium</option>
+                  <option value="4">4</option>
+                  <option value="5">5 &mdash; Hard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qbType">Question Type</label>
+                <select class="form-input" id="qbType">
+                  <option value="text_input">Text Input</option>
+                  <option value="multiple_choice">Multiple Choice</option>
+                  <option value="true_false">True / False</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="qbPublic" />
+                  <span>Make public (share with all teachers)</span>
+                </label>
+              </div>
+              <button class="btn btn-primary btn-lg btn-bracket btn-full" id="createQuestionBtn">Create Question</button>
+            </div>
+          </section>
+
+          <section class="page-section">
+            <div class="section-header">
+              <div class="section-kicker">Library</div>
+              <h2 class="section-title">My Question Bank</h2>
+            </div>
+            <div class="question-bank-list" id="questionsBankList"></div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/main.js"></script>
@@ -168,5 +156,5 @@
     }
   </script>
 
-  </body>
+</body>
 </html>

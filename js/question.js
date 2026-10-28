@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  var page = document.querySelector('.question-page');
+  var page = document.querySelector('.app-shell');
   if (!page || typeof sb === 'undefined' || typeof answersMatch === 'undefined') return;
 
   requireSession(function (session) {
@@ -27,18 +27,16 @@
     var textEl = document.getElementById('questionText');
     var exprEl = document.getElementById('questionExpression');
     var inputEl = document.querySelector('.question-answer-input');
-    var submitBtn = document.getElementById('submitBtn');
+    var submitBtn = document.querySelector('.submit-btn');
     var navEl = document.querySelector('.question-nav');
     var progressFill = document.getElementById('progressFill');
     var currentEl = document.getElementById('questionCurrent');
     var totalEl = document.getElementById('questionTotal');
     var xpEl = document.getElementById('questionXp');
     var scoreEl = document.getElementById('questionScore');
-    var streakEl = document.getElementById('questionStreak');
     var feedbackEl = document.getElementById('questionFeedback');
     var feedbackIcon = document.getElementById('feedbackIcon');
     var feedbackMessage = document.getElementById('feedbackMessage');
-    var explanationEl = document.getElementById('questionExplanation');
 
     if (!exprEl || !inputEl || !submitBtn) return;
 
@@ -92,10 +90,6 @@
                 totalXP = correctCount * 10;
                 if (xpEl) xpEl.textContent = totalXP;
                 if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
-                loadStreak(userId).then(function (s) {
-                  currentStreak = s || 0;
-                  if (streakEl) streakEl.textContent = currentStreak + ' day streak 🔥';
-                });
                 render(0);
               });
             });
@@ -116,16 +110,6 @@
           });
           return result;
         });
-    }
-
-    function loadStreak(uId) {
-      return sb.from('user_streaks')
-        .select('current_streak')
-        .eq('user_id', uId)
-        .single()
-        .then(function (_ref) {
-          return (_ref.data && _ref.data.current_streak) || 0;
-        }).catch(function () { return 0; });
     }
 
     function loadSpacedRepetition(uId, qIds) {
@@ -162,7 +146,7 @@
         questions.forEach(function (_q, i) {
           var btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'q-button';
+          btn.className = 'q-dot';
           btn.textContent = (i + 1).toString();
           if (i === currentIdx) btn.classList.add('current');
           else if (answeredQuestions[_q.id]) btn.classList.add('answered');
@@ -175,38 +159,26 @@
       if (existing) {
         inputEl.value = existing.answer;
         inputEl.style.borderColor = existing.isCorrect ? '#10b981' : '#ef4444';
+        inputEl.classList.toggle('correct', existing.isCorrect);
+        inputEl.classList.toggle('incorrect', !existing.isCorrect);
         submitBtn.textContent = existing.isCorrect ? 'Correct!' : 'Try again';
         submitBtn.disabled = true;
-        submitBtn.classList.toggle('correct', existing.isCorrect);
-        submitBtn.classList.toggle('incorrect', !existing.isCorrect);
-        showExistingExplanation(q, existing);
+        showFeedback(existing.isCorrect, existing.isCorrect ? 'Correct!' : 'Try again');
       } else {
         inputEl.value = '';
         inputEl.focus();
         inputEl.style.borderColor = '';
+        inputEl.classList.remove('correct', 'incorrect');
         submitBtn.textContent = 'Submit Answer';
         submitBtn.disabled = false;
         submitBtn.classList.remove('correct', 'incorrect');
-        if (explanationEl) explanationEl.style.display = 'none';
-      }
-
-      if (feedbackEl) feedbackEl.classList.remove('show', 'correct', 'incorrect');
-    }
-
-    function showExistingExplanation(q, existing) {
-      if (!explanationEl) return;
-      if (q.explanation) {
-        explanationEl.innerHTML = '<strong>Explanation:</strong> ' + q.explanation;
-        explanationEl.style.display = 'block';
-        explanationEl.style.color = existing.isCorrect ? '#10b981' : '#ef4444';
-      } else {
-        explanationEl.style.display = 'none';
+        hideFeedback();
       }
     }
 
     function showFeedback(correct, message) {
       if (!feedbackEl) return;
-      feedbackEl.className = 'question-feedback show ' + (correct ? 'correct' : 'incorrect');
+      feedbackEl.className = 'feedback-overlay show ' + (correct ? 'correct' : 'incorrect');
       feedbackIcon.textContent = correct ? '✓' : '✗';
       feedbackMessage.textContent = message;
       if (typeof gsap !== 'undefined') {
@@ -236,6 +208,8 @@
       submitBtn.textContent = correct ? 'Correct!' : 'Try again';
       submitBtn.disabled = true;
       inputEl.style.borderColor = correct ? '#10b981' : '#ef4444';
+      inputEl.classList.toggle('correct', correct);
+      inputEl.classList.toggle('incorrect', !correct);
       submitBtn.classList.toggle('correct', correct);
       submitBtn.classList.toggle('incorrect', !correct);
 
@@ -254,17 +228,10 @@
       saveAttempt(userId, q.id, given, correct).then(function () {
         if (correct && isNewCorrect) {
           awardXP(userId, 10).then(function () {
-            updateStreak(userId).then(function (newStreak) {
-              currentStreak = newStreak;
-              if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
-              checkBadges(userId, correctCount, totalXP);
-            });
+            // Streak updated via dashboard rail on next load
+            checkBadges(userId, correctCount, totalXP);
           });
         } else {
-          updateStreak(userId).then(function (newStreak) {
-            currentStreak = newStreak;
-            if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
-          });
           checkBadges(userId, correctCount, totalXP);
         }
       });
@@ -322,37 +289,54 @@
         });
     }
 
-    function updateStreak(uId) {
-      return sb.from('user_streaks')
-        .select('current_streak, last_practiced_date')
+    function updateSpacedRepetition(uId, qId, isCorrect) {
+      return sb.from('spaced_repetition')
+        .select('*')
         .eq('user_id', uId)
+        .eq('question_id', qId)
         .single()
         .then(function (_ref) {
-          var data = _ref.data || { current_streak: 0, last_practiced_date: null };
+          var sr = _ref.data;
           var today = new Date().toISOString().split('T')[0];
-          var newStreak = data.current_streak || 0;
 
-          if (data.last_practiced_date === today) {
-            return newStreak;
+          if (!sr) {
+            return sb.from('spaced_repetition').insert({
+              user_id: uId,
+              question_id: qId,
+              interval_days: 1,
+              ease_factor: 2.5,
+              next_review_date: today,
+              repetitions: 0,
+              last_result: isCorrect
+            });
           }
 
-          var yesterday = new Date();
-          yesterday.setDate(yesterday.getDate() - 1);
-          yesterday = yesterday.toISOString().split('T')[0];
+          var newInterval = sr.interval_days;
+          var newEase = sr.ease_factor;
+          var newReps = sr.repetitions;
 
-          if (data.last_practiced_date === yesterday) {
-            newStreak += 1;
+          if (isCorrect) {
+            newReps += 1;
+            newInterval = Math.round(newInterval * newEase);
+            newEase = Math.max(1.3, newEase + 0.1);
           } else {
-            newStreak = 1;
+            newInterval = 1;
+            newEase = Math.max(1.3, newEase - 0.2);
+            newReps = 0;
           }
 
-          return sb.from('user_streaks').upsert({
+          var nextDate = new Date();
+          nextDate.setDate(nextDate.getDate() + newInterval);
+
+          return sb.from('spaced_repetition').upsert({
             user_id: uId,
-            current_streak: newStreak,
-            last_practiced_date: today
-          }, { onConflict: 'user_id' }).then(function () {
-            return newStreak;
-          });
+            question_id: qId,
+            interval_days: newInterval,
+            ease_factor: newEase,
+            next_review_date: nextDate.toISOString().split('T')[0],
+            repetitions: newReps,
+            last_result: isCorrect
+          }, { onConflict: 'user_id,question_id' });
         });
     }
 
@@ -366,7 +350,6 @@
             var shouldEarn = false;
             if (badge.criteria_type === 'questions' && correctCount >= badge.criteria_value) shouldEarn = true;
             if (badge.criteria_type === 'xp' && totalXP >= badge.criteria_value) shouldEarn = true;
-            if (badge.criteria_type === 'streak' && currentStreak >= badge.criteria_value) shouldEarn = true;
             if (badge.criteria_type === 'perfect' && correctCount >= badge.criteria_value) shouldEarn = true;
             if (shouldEarn) {
               sb.from('user_badges').insert({ user_id: uId, badge_id: badge.id }).then(function () {
@@ -383,7 +366,7 @@
       exprEl.style.display = 'none';
       inputEl.style.display = 'none';
       submitBtn.style.display = 'none';
-      feedbackEl.style.display = 'none';
+      hideFeedback();
 
       if (typeof gsap !== 'undefined') {
         gsap.to(textEl, { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1 });
