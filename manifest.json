@@ -1,0 +1,25 @@
+{
+  "name": "100Percent - Maths Confidence Engineered",
+  "short_name": "100Percent",
+  "description": "Personalised maths homework - build confidence, earn XP, master maths",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050a12",
+  "theme_color": "#d4af37",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://jkd2013.github.io/100percent-maths/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://jkd2013.github.io/100percent-maths/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "math", "learning"],
+  "lang": "en",
+  "dir": "ltr"
+}
