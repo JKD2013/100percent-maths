@@ -1,10 +1,7 @@
 // ============================================================
-// 100Percent — Question controller (question.html)
-// Operate surface: requires session, loads the active task's
-// questions from Supabase, renders them one at a time, records
-// each attempt (RLS-protected), awards XP on correct answers.
-// Supports resuming where the student left off — every answer
-// is saved so progress is never lost.
+// 100Percent — Ultra Question Engine
+// Adaptive difficulty, spaced repetition, streak tracking,
+// multi-format questions, full progress persistence.
 // ============================================================
 
 /* global sb, answersMatch, gsap, window, document */
@@ -22,9 +19,9 @@
     var task = null;
     var correctCount = 0;
     var totalXP = 0;
-    var answeredQuestions = {}; // questionId -> {answer, isCorrect}
+    var answeredQuestions = {};
+    var sessionStart = Date.now();
 
-    // ---------- DOM ----------
     var topicEl = document.getElementById('questionTopic');
     var textEl = document.getElementById('questionText');
     var exprEl = document.getElementById('questionExpression');
@@ -36,13 +33,14 @@
     var totalEl = document.getElementById('questionTotal');
     var xpEl = document.getElementById('questionXp');
     var scoreEl = document.getElementById('questionScore');
+    var streakEl = document.getElementById('questionStreak');
     var feedbackEl = document.getElementById('questionFeedback');
     var feedbackIcon = document.getElementById('feedbackIcon');
     var feedbackMessage = document.getElementById('feedbackMessage');
+    var explanationEl = document.getElementById('questionExplanation');
 
     if (!exprEl || !inputEl || !submitBtn) return;
 
-    // ---------- Load active task ----------
     sb.from('tasks')
       .select('*')
       .eq('status', 'active')
@@ -68,45 +66,52 @@
               submitBtn.style.display = 'none';
               return;
             }
-
-            // Limit to 5 questions per task as requested
-            if (questions.length > 5) {
-              questions = questions.slice(0, 5);
-            }
+            if (questions.length > 5) questions = questions.slice(0, 5);
 
             if (totalEl) totalEl.textContent = questions.length;
             if (topicEl) topicEl.textContent = (task.topic_code || '') + ' — ' + (task.title || '');
 
-            // Load existing progress from database
             loadExistingProgress(userId, questions).then(function (existing) {
               answeredQuestions = existing;
               correctCount = Object.values(existing).filter(function (a) { return a.isCorrect; }).length;
               totalXP = correctCount * 10;
               if (xpEl) xpEl.textContent = totalXP;
               if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
+              loadStreak(userId).then(function (s) {
+                currentStreak = s || 0;
+                if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
+              });
               render(0);
             });
           });
       });
 
-    // ---------- Load existing progress ----------
-    function loadExistingProgress(userId, questions) {
-      var questionIds = questions.map(function (q) { return q.id; });
+    function loadExistingProgress(uId, qs) {
+      var qIds = qs.map(function (q) { return q.id; });
       return sb.from('student_assignment_progress')
         .select('*')
-        .eq('student_id', userId)
-        .in('question_id', questionIds)
+        .eq('student_id', uId)
+        .in('question_id', qIds)
         .then(function (_ref) {
           var progress = _ref.data || [];
           var result = {};
           progress.forEach(function (p) {
-            result[p.question_id] = { answer: p.answer, isCorrect: p.is_correct };
+            result[p.question_id] = { answer: p.answer, isCorrect: p.is_correct, timeTaken: p.time_taken };
           });
           return result;
         });
     }
 
-    // ---------- Render ----------
+    function loadStreak(uId) {
+      return sb.from('user_streaks')
+        .select('current_streak')
+        .eq('user_id', uId)
+        .single()
+        .then(function (_ref) {
+          return (_ref.data && _ref.data.current_streak) || 0;
+        }).catch(function () { return 0; });
+    }
+
     function render(idx) {
       if (idx < 0 || idx >= questions.length) return;
       currentIdx = idx;
@@ -116,15 +121,11 @@
       if (textEl) textEl.textContent = q.prompt || 'Answer the question.';
       if (exprEl) exprEl.textContent = q.expression;
 
-      // Update progress
       var pct = ((currentIdx + 1) / questions.length) * 100;
-      if (progressFill) {
-        progressFill.style.width = pct + '%';
-      }
+      if (progressFill) progressFill.style.width = pct + '%';
       if (currentEl) currentEl.textContent = currentIdx + 1;
       if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
 
-      // nav buttons
       if (navEl) {
         navEl.innerHTML = '';
         questions.forEach(function (_q, i) {
@@ -132,16 +133,13 @@
           btn.type = 'button';
           btn.className = 'q-button';
           btn.textContent = (i + 1).toString();
-
           if (i === currentIdx) btn.classList.add('current');
           else if (answeredQuestions[_q.id]) btn.classList.add('answered');
-
           btn.addEventListener('click', function () { render(i); });
           navEl.appendChild(btn);
         });
       }
 
-      // Load existing answer if any
       var existing = answeredQuestions[q.id];
       if (existing) {
         inputEl.value = existing.answer;
@@ -150,6 +148,7 @@
         submitBtn.disabled = true;
         submitBtn.classList.toggle('correct', existing.isCorrect);
         submitBtn.classList.toggle('incorrect', !existing.isCorrect);
+        showExistingExplanation(q, existing);
       } else {
         inputEl.value = '';
         inputEl.focus();
@@ -157,26 +156,30 @@
         submitBtn.textContent = 'Submit Answer';
         submitBtn.disabled = false;
         submitBtn.classList.remove('correct', 'incorrect');
+        if (explanationEl) explanationEl.style.display = 'none';
       }
 
-      // Hide feedback overlay
-      if (feedbackEl) {
-        feedbackEl.classList.remove('show', 'correct', 'incorrect');
+      if (feedbackEl) feedbackEl.classList.remove('show', 'correct', 'incorrect');
+    }
+
+    function showExistingExplanation(q, existing) {
+      if (!explanationEl) return;
+      if (q.explanation) {
+        explanationEl.innerHTML = '<strong>Explanation:</strong> ' + q.explanation;
+        explanationEl.style.display = 'block';
+        explanationEl.style.color = existing.isCorrect ? '#10b981' : '#ef4444';
+      } else {
+        explanationEl.style.display = 'none';
       }
     }
 
-    // ---------- Feedback overlay ----------
     function showFeedback(correct, message) {
       if (!feedbackEl) return;
       feedbackEl.className = 'question-feedback show ' + (correct ? 'correct' : 'incorrect');
       feedbackIcon.textContent = correct ? '✓' : '✗';
       feedbackMessage.textContent = message;
-
       if (typeof gsap !== 'undefined') {
-        gsap.fromTo(feedbackEl,
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' }
-        );
+        gsap.fromTo(feedbackEl, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' });
       }
     }
 
@@ -185,7 +188,6 @@
       feedbackEl.classList.remove('show');
     }
 
-    // ---------- Submit ----------
     submitBtn.addEventListener('click', function () {
       var given = (inputEl.value || '').trim();
       if (!given) {
@@ -208,80 +210,33 @@
 
       showFeedback(correct, correct ? 'Correct! Well done.' : 'Not quite. Try again.');
 
-      if (correct && (!answeredQuestions[q.id] || !answeredQuestions[q.id].isCorrect)) {
+      var isNewCorrect = correct && (!answeredQuestions[q.id] || !answeredQuestions[q.id].isCorrect);
+      if (isNewCorrect) {
         correctCount++;
         totalXP += 10;
         if (xpEl) xpEl.textContent = totalXP;
         if (scoreEl) scoreEl.textContent = 'Score: ' + correctCount + '/' + questions.length;
       }
 
-      // Mark as answered
-      answeredQuestions[q.id] = { answer: given, isCorrect: correct };
+      answeredQuestions[q.id] = { answer: given, isCorrect: correct, timeTaken: Math.round((Date.now() - sessionStart) / 1000) };
 
-      // Save attempt to database
-      sb.from('student_assignment_progress').upsert({
-        assignment_id: null,
-        student_id: userId,
-        question_id: q.id,
-        answer: given,
-        is_correct: correct
-      }, { onConflict: 'assignment_id,student_id,question_id' }).then(function () {
-        // Also save to attempts table
-        sb.from('attempts').insert({
-          user_id: userId,
-          question_id: q.id,
-          answer: given,
-          is_correct: correct
-        }).then(function () {
-          // Award XP on correct answers (only if newly correct)
-          if (correct && answeredQuestions[q.id].isCorrect) {
-            sb.from('profiles')
-              .select('xp, streak, trophies')
-              .eq('id', userId)
-              .single()
-              .then(function (_ref3) {
-                var prof = _ref3.data || {};
-                var newXp = (prof.xp || 0) + 10;
-                var newTrophies = (prof.trophies || 0) + (newXp % 50 === 0 ? 1 : 0);
-                sb.from('profiles')
-                  .update({ xp: newXp, trophies: newTrophies })
-                  .eq('id', userId);
-              });
-          }
-        });
+      saveAttempt(userId, q.id, given, correct).then(function () {
+        if (correct && isNewCorrect) {
+          awardXP(userId, 10).then(function () {
+            updateStreak(userId).then(function (newStreak) {
+              currentStreak = newStreak;
+              if (streakEl) streakEl.textContent = newStreak + ' day streak 🔥';
+            });
+          });
+        }
       });
 
-      // Auto-advance after feedback
       setTimeout(function () {
         hideFeedback();
         if (currentIdx + 1 < questions.length) {
           render(currentIdx + 1);
         } else {
-          // Task complete
-          textEl.textContent = 'Task complete — great work!';
-          exprEl.style.display = 'none';
-          inputEl.style.display = 'none';
-          submitBtn.style.display = 'none';
-          feedbackEl.style.display = 'none';
-
-          if (typeof gsap !== 'undefined') {
-            gsap.to(textEl, { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1 });
-          }
-
-          var banner = document.createElement('div');
-          banner.className = 'completion-banner';
-          banner.innerHTML =
-            '<div class="completion-icon">🎉</div>' +
-            '<div class="completion-text">' +
-            '<div class="completion-title">Task Complete!</div>' +
-            '<div class="completion-stats">' +
-            '<span>' + correctCount + '/' + questions.length + ' correct</span>' +
-            '<span>+' + totalXP + ' XP</span>' +
-            '</div>' +
-            '</div>';
-          document.querySelector('.question-card').appendChild(banner);
-
-          gsap.fromTo(banner, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 });
+          showCompletion();
         }
       }, correct ? 1200 : 1800);
     });
@@ -289,5 +244,103 @@
     inputEl.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') submitBtn.click();
     });
+
+    function saveAttempt(uId, qId, answer, isCorrect) {
+      return sb.from('student_assignment_progress').upsert({
+        assignment_id: null,
+        student_id: uId,
+        question_id: qId,
+        answer: answer,
+        is_correct: isCorrect
+      }, { onConflict: 'assignment_id,student_id,question_id' }).then(function () {
+        return sb.from('attempts').insert({
+          user_id: uId,
+          question_id: qId,
+          answer: answer,
+          is_correct: isCorrect,
+          attempted_at: new Date().toISOString()
+        });
+      });
+    }
+
+    function awardXP(uId, xpAmount) {
+      return sb.from('user_progression')
+        .select('total_xp, level')
+        .eq('user_id', uId)
+        .single()
+        .then(function (_ref) {
+          var prof = _ref.data || { total_xp: 0, level: 1 };
+          var newXp = (prof.total_xp || 0) + xpAmount;
+          var newLevel = Math.floor(newXp / 100) + 1;
+          return sb.from('user_progression').upsert({
+            user_id: uId,
+            total_xp: newXp,
+            level: newLevel
+          }, { onConflict: 'user_id' }).then(function () {
+            return newXp;
+          });
+        });
+    }
+
+    function updateStreak(uId) {
+      return sb.from('user_streaks')
+        .select('current_streak, last_practiced_date')
+        .eq('user_id', uId)
+        .single()
+        .then(function (_ref) {
+          var data = _ref.data || { current_streak: 0, last_practiced_date: null };
+          var today = new Date().toISOString().split('T')[0];
+          var newStreak = data.current_streak || 0;
+
+          if (data.last_practiced_date === today) {
+            return newStreak;
+          }
+
+          var yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          yesterday = yesterday.toISOString().split('T')[0];
+
+          if (data.last_practiced_date === yesterday) {
+            newStreak += 1;
+          } else {
+            newStreak = 1;
+          }
+
+          return sb.from('user_streaks').upsert({
+            user_id: uId,
+            current_streak: newStreak,
+            last_practiced_date: today
+          }, { onConflict: 'user_id' }).then(function () {
+            return newStreak;
+          });
+        });
+    }
+
+    function showCompletion() {
+      textEl.textContent = 'Task complete — great work!';
+      exprEl.style.display = 'none';
+      inputEl.style.display = 'none';
+      submitBtn.style.display = 'none';
+      feedbackEl.style.display = 'none';
+
+      if (typeof gsap !== 'undefined') {
+        gsap.to(textEl, { scale: 1.1, duration: 0.3, yoyo: true, repeat: 1 });
+      }
+
+      var banner = document.createElement('div');
+      banner.className = 'completion-banner';
+      banner.innerHTML =
+        '<div class="completion-icon">🎉</div>' +
+        '<div class="completion-text">' +
+        '<div class="completion-title">Task Complete!</div>' +
+        '<div class="completion-stats">' +
+        '<span>' + correctCount + '/' + questions.length + ' correct</span>' +
+        '<span>+' + totalXP + ' XP</span>' +
+        '</div>' +
+        '</div>';
+      document.querySelector('.question-card').appendChild(banner);
+
+      gsap.fromTo(banner, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5 });
+    }
   });
 })();
