@@ -2875,3 +2875,223 @@ header .nav-link:hover {
 .join-group-card .btn {
   width: 100%;
 }
+
+/* ============================================================
+   QUESTION BANK BUILDER
+   ============================================================ */
+
+.create-question-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 32px;
+  max-width: 700px;
+}
+
+.question-bank-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.question-bank-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-bank-card .qb-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-bank-card .qb-card-title {
+  font-weight: 700;
+  color: var(--snow);
+  font-size: 0.95rem;
+}
+
+.question-bank-card .qb-card-topic {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.question-bank-card .qb-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.question-bank-card .qb-card-expression {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--snow);
+  background: var(--surface);
+  padding: 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+}
+
+.question-bank-card .qb-card-answer {
+  font-size: 0.875rem;
+  color: var(--fog);
+}
+
+.question-bank-card .qb-card-difficulty {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.question-bank-card .qb-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Leaderboard */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th {
+  text-align: left;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fog);
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.leaderboard-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+
+.leaderboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.rank-badge {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--snow);
+  margin-right: 8px;
+}
+
+.rank-badge.rank-1 { color: var(--gold); border-color: var(--gold); }
+.rank-badge.rank-2 { color: #c0c0c0; border-color: #c0c0c0; }
+.rank-badge.rank-3 { color: #cd7f32; border-color: #cd7f32; }
+
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.student-info {
+  flex: 1;
+}
+
+.student-name {
+  font-weight: 600;
+  color: var(--snow);
+}
+
+.student-school {
+  font-size: 0.6875rem;
+  color: var(--fog);
+  letter-spacing: 0.08em;
+}
+
+.create-badge-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.badges-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.badge-card {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  text-align: center;
+}
+
+.badge-card.earned {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.badge-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.badge-name {
+  font-weight: 700;
+  color: var(--snow);
+  margin-bottom: 6px;
+}
+
+.badge-description {
+  font-size: 0.75rem;
+  color: var(--fog);
+  margin-bottom: 8px;
+}
+
+.badge-criteria {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.badge-locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
