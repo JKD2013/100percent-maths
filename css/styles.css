@@ -1449,23 +1449,144 @@ button, .btn, .form-input, .q-dot, .submit-btn, .rail-signout, .rail-task-btn {
   pointer-events: none;
 }
 
-/* Journey beats — scroll in lockstep with the 3D camera */
-#journey .beat {
+/* ---------- 4 Sectors — full viewport height each ---------- */
+#journey {
   position: relative;
   isolation: isolate;
 }
 
-/* Beat content reveals driven by scroll progress (synced with camera) */
-#journey .beat .statement,
-#journey .beat .manifesto-sub,
-#journey .beat .station-caption,
-#journey .beat .readout-row,
-#journey .beat .section-kicker,
-#journey .beat .finale-numeral,
-#journey .beat .finale-statement,
-#journey .beat .finale-actions {
+#journey .sector {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding: 0 6vw;
+  isolation: isolate;
+}
+
+/* Sector content box */
+.sector-content {
+  max-width: 720px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Sector typography */
+.sector-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.sector-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--snow);
+  margin: 0 0 16px 0;
+  letter-spacing: -0.02em;
+}
+
+.sector-title-large {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--gold);
+  margin: 8px 0 16px 0;
+  letter-spacing: -0.02em;
+}
+
+.sector-text {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--fog);
+  margin: 0 0 20px 0;
+}
+
+.sector-meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fog-dim);
+  margin-top: 8px;
+}
+
+/* Sector numeral (sector 4) */
+.sector-numeral {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.sector-numeral span {
+  font-size: 0.5em;
+  margin-left: 4px;
+  vertical-align: top;
+}
+
+/* Sector actions */
+.sector-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* Sector background tints for depth */
+.sector-1 { background: transparent; }
+.sector-2 { background: rgba(10, 15, 26, 0.3); }
+.sector-3 { background: transparent; }
+.sector-4 { background: rgba(10, 15, 26, 0.2); }
+
+/* Sector content visibility — synced with camera */
+#journey .sector .sector-kicker,
+#journey .sector .sector-title,
+#journey .sector .sector-title-large,
+#journey .sector .sector-text,
+#journey .sector .sector-meta,
+#journey .sector .sector-numeral,
+#journey .sector .sector-actions {
   opacity: 1;
   transform: none;
   visibility: visible;
+}
+
+/* Responsive: stack actions on mobile */
+@media (max-width: 639px) {
+  #journey .sector {
+    padding: 0 4vw;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+  .sector-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .sector-actions {
+    justify-content: center;
+    flex-direction: column;
+  }
+  .sector-actions .btn {
+    width: 100%;
+    max-width: 280px;
+  }
 }
 

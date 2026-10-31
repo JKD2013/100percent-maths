@@ -52,25 +52,22 @@ function initPreloader() {
 }
 
 // ----------------------------------------
-// 0b. Journey beat reveals (index)
-// Text scrolls naturally with the page — synced with 3D camera via scroll.
-// No ScrollTrigger reveals; content hangs from edges and scrolls up
-// in lockstep with the camera dolly.
+// 0b. Journey sector reveals (index)
+// All sector text is visible from load — no staggered reveals.
+// Text scrolls in lockstep with the 3D camera via scroll progress.
 // ----------------------------------------
-function initBeatReveals() {
+function initSectorReveals() {
   const revealTargets = [
-    '.beat-manifesto .statement',
-    '.beat-manifesto .manifesto-sub',
-    '.station-caption',
-    '.readout-row',
-    '.beat-ticker .section-kicker',
-    '.finale-numeral',
-    '.finale-statement',
-    '.finale-actions'
+    '.sector-kicker',
+    '.sector-title',
+    '.sector-title-large',
+    '.sector-text',
+    '.sector-meta',
+    '.sector-numeral',
+    '.sector-actions'
   ];
   revealTargets.forEach((selector) => {
-    const els = document.querySelectorAll(selector);
-    els.forEach(el => {
+    document.querySelectorAll(selector).forEach(el => {
       el.style.opacity = '1';
       el.style.transform = 'none';
       el.style.visibility = 'visible';
@@ -80,26 +77,11 @@ function initBeatReveals() {
 
 // ----------------------------------------
 // 0c. Unified scroll — one ScrollTrigger drives both 3D camera and DOM text
-// This keeps shapes and text moving together as a single camera dolly.
+// Keeps shapes and text moving together as a single camera dolly.
 // ----------------------------------------
 function initUnifiedScroll() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
-
-  const doc = document.documentElement;
-  const maxScroll = Math.max(doc.scrollHeight - window.innerHeight, 1);
-
-  // All text selectors that should scroll in lockstep with the camera
-  const textSelectors = [
-    '.beat-manifesto .statement',
-    '.beat-manifesto .manifesto-sub',
-    '.station-caption',
-    '.readout-row',
-    '.beat-ticker .section-kicker',
-    '.finale-numeral',
-    '.finale-statement',
-    '.finale-actions'
-  ];
 
   ScrollTrigger.create({
     trigger: document.body,
@@ -112,33 +94,6 @@ function initUnifiedScroll() {
       if (typeof window.__descentSetProgress === 'function') {
         window.__descentSetProgress(p);
       }
-
-      // Drive text visibility/transform from the same progress
-      // Each text block fades in as its beat's center crosses the viewport
-      textSelectors.forEach((sel) => {
-        document.querySelectorAll(sel).forEach((el) => {
-          const beat = el.closest('.beat');
-          if (!beat) return;
-
-          const beatTop = beat.offsetTop;
-          const beatHeight = beat.offsetHeight;
-          const beatCenter = beatTop + beatHeight / 2;
-          const viewportCenter = window.innerHeight / 2;
-
-          // Normalize: when beat center hits viewport center, text is fully visible
-          const beatProgress = (beatCenter - viewportCenter) / maxScroll;
-          const fadeStart = beatProgress - 0.15;
-          const fadeEnd = beatProgress + 0.15;
-
-          let opacity = 1;
-          if (p < fadeStart) opacity = 0;
-          else if (p > fadeEnd) opacity = 1;
-          else opacity = (p - fadeStart) / (fadeEnd - fadeStart);
-
-          el.style.opacity = Math.min(Math.max(opacity, 0), 1);
-          el.style.transform = `translateY(${(1 - opacity) * 20}px)`;
-        });
-      });
     },
   });
 }
@@ -790,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initVanta();
     initHeroAnimations();
     initScrollAnimations();
-    initBeatReveals();
+    initSectorReveals();
     initUnifiedScroll();
     initMagneticButtons();
     initTiltCards();
