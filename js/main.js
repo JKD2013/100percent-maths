@@ -52,12 +52,12 @@ function initPreloader() {
 }
 
 // ----------------------------------------
-// 0b. Journey beat reveals (index) — immediateRender:false
-// keeps content visible even if animations stall.
+// 0b. Journey beat reveals (index)
+// Text scrolls naturally with the page — synced with 3D camera via scroll.
+// No ScrollTrigger reveals; content hangs from edges and scrolls up
+// in lockstep with the camera dolly.
 // ----------------------------------------
 function initBeatReveals() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-
   const revealTargets = [
     '.beat-manifesto .statement',
     '.beat-manifesto .manifesto-sub',
@@ -68,22 +68,12 @@ function initBeatReveals() {
     '.finale-statement',
     '.finale-actions'
   ];
-
   revealTargets.forEach((selector) => {
-    const els = gsap.utils.toArray(selector);
-    if (!els.length) return;
-    gsap.from(els, {
-      opacity: 0,
-      y: 36,
-      duration: 0.9,
-      ease: 'power3.out',
-      stagger: 0.08,
-      immediateRender: false,
-      scrollTrigger: {
-        trigger: els[0].closest('.beat') || els[0],
-        start: 'top 80%',
-        toggleActions: 'play none none none'
-      }
+    const els = document.querySelectorAll(selector);
+    els.forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.visibility = 'visible';
     });
   });
 }
@@ -346,36 +336,21 @@ function initMagneticButtons() {
 
 // ----------------------------------------
 // 8. Split Text (React Bits port)
+// Split characters show immediately — they scroll with the page
+// in lockstep with the 3D camera.
 // ----------------------------------------
 function splitTextChars(element) {
   const text = element.textContent;
   element.setAttribute('aria-label', text);
-  element.innerHTML = text.split('').map((char, i) => 
-    `<span class="split-char" aria-hidden="true" style="display:inline-block; transition-delay:${i * 28}ms">${char === ' ' ? '&nbsp;' : char}</span>`
+  element.innerHTML = text.split('').map((char, i) =>
+    `<span class="split-char" aria-hidden="true" style="display:inline-block; opacity:1; transform:none;">${char === ' ' ? '&nbsp;' : char}</span>`
   ).join('');
 }
 
 function initSplitText() {
   const elements = document.querySelectorAll('.split-text');
   if (!elements.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.dataset.split) {
-        entry.target.dataset.split = 'true';
-        entry.target.querySelectorAll('.split-char').forEach(char => {
-          char.style.opacity = '1';
-          char.style.transform = 'translateY(0)';
-        });
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  elements.forEach(el => {
-    splitTextChars(el);
-    observer.observe(el);
-  });
+  elements.forEach(el => splitTextChars(el));
 }
 
 // ----------------------------------------
