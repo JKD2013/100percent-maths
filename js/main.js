@@ -79,6 +79,71 @@ function initBeatReveals() {
 }
 
 // ----------------------------------------
+// 0c. Unified scroll — one ScrollTrigger drives both 3D camera and DOM text
+// This keeps shapes and text moving together as a single camera dolly.
+// ----------------------------------------
+function initUnifiedScroll() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  const doc = document.documentElement;
+  const maxScroll = Math.max(doc.scrollHeight - window.innerHeight, 1);
+
+  // All text selectors that should scroll in lockstep with the camera
+  const textSelectors = [
+    '.beat-manifesto .statement',
+    '.beat-manifesto .manifesto-sub',
+    '.station-caption',
+    '.readout-row',
+    '.beat-ticker .section-kicker',
+    '.finale-numeral',
+    '.finale-statement',
+    '.finale-actions'
+  ];
+
+  ScrollTrigger.create({
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => {
+      const p = self.progress; // 0..1 linear scroll progress
+
+      // Drive the 3D camera from the SAME progress value
+      if (typeof window.__descentSetProgress === 'function') {
+        window.__descentSetProgress(p);
+      }
+
+      // Drive text visibility/transform from the same progress
+      // Each text block fades in as its beat's center crosses the viewport
+      textSelectors.forEach((sel) => {
+        document.querySelectorAll(sel).forEach((el) => {
+          const beat = el.closest('.beat');
+          if (!beat) return;
+
+          const beatTop = beat.offsetTop;
+          const beatHeight = beat.offsetHeight;
+          const beatCenter = beatTop + beatHeight / 2;
+          const viewportCenter = window.innerHeight / 2;
+
+          // Normalize: when beat center hits viewport center, text is fully visible
+          const beatProgress = (beatCenter - viewportCenter) / maxScroll;
+          const fadeStart = beatProgress - 0.15;
+          const fadeEnd = beatProgress + 0.15;
+
+          let opacity = 1;
+          if (p < fadeStart) opacity = 0;
+          else if (p > fadeEnd) opacity = 1;
+          else opacity = (p - fadeStart) / (fadeEnd - fadeStart);
+
+          el.style.opacity = Math.min(Math.max(opacity, 0), 1);
+          el.style.transform = `translateY(${(1 - opacity) * 20}px)`;
+        });
+      });
+    },
+  });
+}
+
+// ----------------------------------------
 // 1. Lenis Smooth Scroll (with GSAP sync)
 // ----------------------------------------
 let lenis = null;
@@ -726,6 +791,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroAnimations();
     initScrollAnimations();
     initBeatReveals();
+    initUnifiedScroll();
     initMagneticButtons();
     initTiltCards();
     initAnimationWatchdog();

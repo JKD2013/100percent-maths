@@ -201,6 +201,11 @@
   var targetProgress = 0;
   var mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
+  // Expose progress setter so main.js can drive camera + text from one ScrollTrigger.
+  window.__descentSetProgress = function (p) {
+    targetProgress = Math.min(Math.max(p, 0), 1);
+  };
+
   // ---------- Beat-anchor remap ----------
   // DOM beats and the 3D path must agree: when a beat's center hits the
   // viewport center, the camera sits exactly at that beat's path position.
@@ -252,14 +257,11 @@
   }
 
   // ---------- Scroll integration ----------
+  // Progress is driven externally by main.js via __descentSetProgress so that
+  // the 3D camera and DOM text share ONE scroll source (unified camera dolly).
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && !reduced) {
     gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate: function (self) { targetProgress = remap(self.progress); }
-    });
+    // Main.js owns this ScrollTrigger; scene.js only consumes __descentSetProgress.
   } else {
     window.addEventListener('scroll', computeProgressManually, { passive: true });
   }

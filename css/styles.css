@@ -1437,3 +1437,35 @@ button, .btn, .form-input, .q-dot, .submit-btn, .rail-signout, .rail-task-btn {
     padding-bottom: max(40px, env(safe-area-inset-bottom));
   }
 }
+
+/* ---------- Unified scroll: fixed 3D canvas ---------- */
+#scene {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Journey beats — scroll in lockstep with the 3D camera */
+#journey .beat {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Beat content reveals driven by scroll progress (synced with camera) */
+#journey .beat .statement,
+#journey .beat .manifesto-sub,
+#journey .beat .station-caption,
+#journey .beat .readout-row,
+#journey .beat .section-kicker,
+#journey .beat .finale-numeral,
+#journey .beat .finale-statement,
+#journey .beat .finale-actions {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
