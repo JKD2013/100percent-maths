@@ -1250,21 +1250,190 @@ select.form-input {
 .student-actions { flex-shrink: 0; }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-  .app-layout { grid-template-columns: 1fr; }
-  .app-rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
-  .app-main { padding: 24px; }
-  .question-card { padding: 32px 20px; }
-  .create-card { padding: 20px; }
-  .rail-trophies { grid-template-columns: repeat(4, 1fr); gap: 5px; }
-  .rail-trophy-card { width: 32px; height: 32px; font-size: 12px; }
-  .hud-inner { gap: 12px; }
+
+/* Base: mobile-first responsive type & spacing */
+html {
+  font-size: 14px;
 }
 
-/* ---------- Reduced Motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-  .progress-fill { transition: none; }
-  .cue-arrow { animation: none; }
-  .dot { animation: none; }
+body {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Touch-friendly minimum targets */
+button, .btn, .form-input, .q-dot, .submit-btn, .rail-signout, .rail-task-btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ---------- Mobile: up to 639px ---------- */
+@media (max-width: 639px) {
+  :root {
+    --r-sm: 1px;
+    --r-md: 2px;
+  }
+
+  .container { padding: 0 16px; }
+
+  .hud { height: 56px; }
+  .hud-inner { padding: 0 16px; }
+  .hud-nav { display: none; }
+  .hud-nav-github { display: none; }
+  .logo-mark { width: 24px; height: 24px; font-size: 9px; }
+  .logo-word { font-size: 0.625rem; letter-spacing: 0.18em; }
+
+  .app-layout { grid-template-columns: 1fr; }
+  .app-rail {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 24px 16px;
+    overflow-y: visible;
+  }
+  .app-main { padding: 24px 16px 32px; }
+  .app-container { max-width: 100%; }
+
+  .rail-trophies { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .rail-trophy-card { width: 32px; height: 32px; font-size: 12px; }
+  .rail-trophy-count { font-size: 1.1rem; }
+
+  .btn { padding: 12px 20px; font-size: 0.625rem; }
+  .btn-lg { padding: 14px 24px; font-size: 0.6875rem; }
+  .btn-full { width: 100%; }
+
+  .form-input { font-size: 16px; padding: 14px 16px; } /* 16px prevents iOS zoom */
+  .question-answer-input { font-size: 16px; padding: 18px 20px; }
+
+  .question-card { padding: 32px 20px; }
+  .question-expression { font-size: 1.5rem; padding: 24px; }
+  .question-text { font-size: 1rem; }
+
+  .question-sticky { padding: 10px 16px; gap: 14px; }
+  .progress-wrap { gap: 12px; }
+  .counter-chip { font-size: 0.75rem; min-width: 40px; }
+  .xp-chip { font-size: 0.5rem; min-width: 56px; }
+
+  .feedback-overlay { padding: 24px 32px; font-size: 1.25rem; left: 10%; right: 10%; transform: translate(-50%, -50%); }
+  .completion-banner { padding: 32px 24px; left: 10%; right: 10%; transform: translate(-50%, -50%); }
+  .completion-title { font-size: 1.25rem; }
+
+  .leaderboard-table { font-size: 0.6875rem; }
+  .leaderboard-table th, .leaderboard-table td { padding: 10px 8px; }
+  .rank-badge { width: 20px; height: 20px; font-size: 0.625rem; }
+
+  .badges-list { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+  .badge-card { padding: 16px; }
+  .badge-icon { font-size: 1.75rem; }
+
+  .create-card { padding: 20px; max-width: 100%; }
+
+  .task-item { padding: 12px 10px; gap: 12px; }
+  .task-icon { width: 28px; height: 28px; font-size: 0.625rem; }
+  .task-title { font-size: 0.75rem; }
+  .task-meta { font-size: 0.5625rem; }
+  .task-badge { font-size: 0.5rem; padding: 4px 8px; }
+
+  .student-row { gap: 10px; }
+  .student-avatar-small { width: 26px; height: 26px; font-size: 0.6875rem; }
+  .student-name { font-size: 0.75rem; }
+  .student-school { font-size: 0.5625rem; }
+
+  .q-dot { min-width: 34px; height: 34px; font-size: 0.625rem; }
+  .question-nav { padding: 12px 16px; gap: 6px; }
+
+  .mastery-row { padding: 14px; gap: 6px; }
+  .mastery-label-row { font-size: 0.6875rem; }
+
+  .section-title { font-size: 1rem; }
+  .section-kicker { font-size: 0.5625rem; margin-bottom: 16px; }
+
+  .watch-video { font-size: 0.5625rem; }
+}
+
+/* ---------- Tablet: 640px to 1023px ---------- */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root { --r-sm: 1px; --r-md: 2px; }
+
+  .container { padding: 0 24px; }
+
+  .hud { height: 58px; }
+  .hud-inner { padding: 0 20px; }
+  .hud-nav { display: none; } /* hide text nav on tablet, keep icons if any */
+  .hud-nav-github { display: none; }
+
+  .app-layout { grid-template-columns: 240px 1fr; }
+  .app-rail { padding: 32px 20px; gap: 28px; }
+  .app-main { padding: 32px 36px 36px; }
+  .app-container { max-width: 100%; }
+
+  .rail-stat-value { font-size: 1.25rem; }
+  .rail-trophies { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .rail-trophy-card { width: 34px; height: 34px; font-size: 13px; }
+
+  .question-card { padding: 40px 28px; }
+  .question-expression { font-size: 1.75rem; padding: 28px; }
+  .question-text { font-size: 1.1rem; }
+
+  .feedback-overlay { left: 10%; right: 10%; }
+  .completion-banner { left: 10%; right: 10%; }
+
+  .badges-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+
+  .create-card { padding: 24px; max-width: 100%; }
+
+  .task-item { padding: 14px 12px; }
+  .task-title { font-size: 0.8125rem; }
+  .task-meta { font-size: 0.5625rem; }
+
+  .q-dot { min-width: 36px; height: 36px; }
+  .question-nav { padding: 14px 20px; gap: 8px; }
+}
+
+/* ---------- Laptop/Desktop: 1024px and up ---------- */
+@media (min-width: 1024px) {
+  .app-layout { grid-template-columns: 260px 1fr; }
+  .app-rail {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+    padding: 40px 28px;
+  }
+  .app-main { padding: 40px 48px 48px; }
+
+  .question-card { max-width: 600px; padding: 48px; }
+  .create-card { max-width: 700px; padding: 28px; }
+
+  .feedback-overlay { left: 50%; right: auto; transform: translate(-50%, -50%) scale(0.85); }
+  .completion-banner { left: 50%; right: auto; transform: translate(-50%, -50%) scale(0.85); }
+
+  .leaderboard-table { font-size: 0.7875rem; }
+  .leaderboard-table th, .leaderboard-table td { padding: 16px; }
+}
+
+/* ---------- Horizontal table scroll on small screens ---------- */
+@media (max-width: 639px) {
+  .leaderboard-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .leaderboard-table th,
+  .leaderboard-table td {
+    white-space: nowrap;
+  }
+}
+
+/* ---------- iOS Safari safe areas ---------- */
+@supports (padding: max(0px)) {
+  .app-main {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+  .question-area {
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+  }
 }
