@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100Percent - Create account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- Fixed HUD -->
+  <div class="hud">
+    <div class="hud-tl">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">100</div>
+        <span class="logo-word">Percent</span>
+      </a>
+    </div>
+    <div class="hud-tr">
+      <a href="for-teachers.html" class="hud-nav">For Teachers</a>
+      <a href="for-students.html" class="hud-nav">For Students</a>
+      <a href="https://github.com/JKD2013/100percent-maths" target="_blank" rel="noopener noreferrer" class="hud-nav hud-nav-github">GitHub</a>
+    </div>
+    <div class="hud-bl">
+      <span class="mono-label">01 <span class="cue-arrow">▾</span></span>
+    </div>
+    <div class="hud-br">
+      <span class="dot"></span><span class="mono-label">System nominal</span>
+    </div>
+  </div>
+
+  <!-- Sign up panel — left rail -->
+  <div class="auth-page">
+    <div class="auth-rail">
+      <a href="index.html" class="auth-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Home
+      </a>
+
+      <div class="auth-brand">
+        <div class="logo-mark">100</div>
+        <span>Percent</span>
+      </div>
+
+      <div class="auth-header">
+        <h1 class="auth-title" id="authTitle">Create an account</h1>
+        <p class="auth-desc" id="authDesc">Join 100Percent and start building maths confidence.</p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <form class="auth-form" id="signUpForm">
+        <div class="form-group">
+          <label class="form-label" for="signupFullName">Full name</label>
+          <input type="text" class="form-input" id="signupFullName" placeholder="Alex Student" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupEmail">Email address</label>
+          <input type="email" class="form-input" id="signupEmail" placeholder="name@school.edu" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupPassword">Password</label>
+          <div class="password-wrapper">
+            <input type="password" class="form-input" id="signupPassword" placeholder="••••••••" required />
+            <button type="button" class="password-toggle" id="toggleSignupPassword" aria-label="Toggle password visibility">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupConfirmPassword">Confirm password</label>
+          <div class="password-wrapper">
+            <input type="password" class="form-input" id="signupConfirmPassword" placeholder="••••••••" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupRole">I am a</label>
+          <select class="form-input" id="signupRole" required>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-bracket btn-full" id="signupSubmitBtn">Create account</button>
+
+        <div class="auth-hint">
+          Already have an account? <a href="login.html" id="switchToSignin">Sign in</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth-signup.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(function(reg) {
+        console.log('Service worker registered:', reg);
+      }).catch(function(err) {
+        console.log('Service worker registration failed:', err);
+      });
+    }
+  </script>
+
+</body>
+</html>
