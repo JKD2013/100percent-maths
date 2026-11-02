@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>100Percent - Task</title>
+  <title>100Percent - Tasks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,16 +39,11 @@
         <div class="task-breadcrumb">
           <a href="dashboard.html" class="hud-nav">Dashboard</a>
           <span class="task-breadcrumb-arrow">/</span>
-          <span class="task-breadcrumb-current">Negative &amp; Fractional Indices</span>
+          <span class="task-breadcrumb-current">KS3 Tasks</span>
         </div>
 
         <div class="task-actions-page">
-          <button class="btn btn-primary btn-lg start-attempt-btn btn-bracket" onclick="window.location.href='question.html'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Start Attempt
-          </button>
+          <a href="question-bank.html" class="btn btn-ghost btn-sm btn-bracket">Question Bank</a>
         </div>
       </div>
     </div>
@@ -57,52 +52,29 @@
       <div class="task-layout">
         <aside class="task-sidebar">
           <div class="task-sidebar-section">
-            <div class="task-sidebar-title">Task Overview</div>
-            <div class="task-meta-grid">
-              <div class="task-meta-item">
-                <span class="task-meta-label">Topic</span>
-                <span class="task-meta-value">Negative &amp; Fractional Indices</span>
-              </div>
-              <div class="task-meta-item">
-                <span class="task-meta-label">Questions</span>
-                <span class="task-meta-value">5</span>
-              </div>
-              <div class="task-meta-item">
-                <span class="task-meta-label">XP Reward</span>
-                <span class="task-meta-value">50 XP</span>
-              </div>
-              <div class="task-meta-item">
-                <span class="task-meta-label">Difficulty</span>
-                <span class="task-meta-value difficulty-medium">Medium</span>
-              </div>
-            </div>
+            <div class="task-sidebar-title">KS3 Topics</div>
+            <p class="task-sidebar-desc">
+              Choose a topic. Questions adapt to your level — get one wrong and it eases back; get three right and it steps up.
+            </p>
           </div>
 
           <div class="task-sidebar-section">
-            <div class="task-sidebar-title">What you&rsquo;ll learn</div>
+            <div class="task-sidebar-title">How it works</div>
             <ul class="learning-list">
-              <li class="learning-item">Negative index rules</li>
-              <li class="learning-item">Fractional exponents</li>
-              <li class="learning-item">Combined operations</li>
+              <li class="learning-item">5 questions per task</li>
+              <li class="learning-item">Instant feedback + worked explanations</li>
+              <li class="learning-item">Adaptive difficulty (KS3 → KS4)</li>
+              <li class="learning-item">+10 XP per correct answer</li>
+              <li class="learning-item">Spaced repetition on wrong answers</li>
             </ul>
           </div>
         </aside>
 
         <main class="task-main">
-          <div class="task-description-card">
-            <h3 class="task-description-title">Ready to begin?</h3>
-            <p class="task-description-text">
-              Work through <strong>5 questions</strong> on negative and fractional indices.
-              Instant feedback after every answer. Earn XP and trophies for correct answers.
-            </p>
+          <h2 class="task-main-title">Choose your topic</h2>
+          <div class="topic-selector" id="topicSelector">
+            <!-- Topic cards injected by JS -->
           </div>
-
-          <button class="start-attempt-btn btn-bracket btn-primary btn-lg" onclick="window.location.href='question.html'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Start Attempt
-          </button>
         </main>
       </div>
     </div>
@@ -112,6 +84,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/adaptive-task.js"></script>
 
   <script>
     if ('serviceWorker' in navigator) {

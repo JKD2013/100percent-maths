@@ -53,32 +53,87 @@
       </div>
     </div>
 
+    <!-- Adaptive header (difficulty meter + session stats) -->
+    <div class="adaptive-header">
+      <div class="difficulty-meter">
+        <span class="difficulty-label" id="difficultyLabel">Medium</span>
+        <div class="difficulty-bar">
+          <div class="difficulty-fill medium" id="difficultyFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="session-stats">
+      <div class="session-stat">
+        <span class="session-stat-label">Correct</span>
+        <span class="session-stat-value" id="statCorrect">0</span>
+      </div>
+      <div class="session-stat">
+        <span class="session-stat-label">Streak</span>
+        <span class="session-stat-value" id="statStreak">0</span>
+      </div>
+      <div class="session-stat">
+        <span class="session-stat-label">XP</span>
+        <span class="session-stat-value" id="statXp">0</span>
+      </div>
+    </div>
+
     <div class="question-area">
-      <div class="question-card">
+      <div class="question-card adaptive-question-card">
         <div class="question-header-row">
           <div class="question-topic" id="questionTopic">Topic</div>
           <div class="xp-chip">
             <span class="question-xp-label">Score</span>
-            <span class="xp-value" id="questionScore">0</span>
+            <span class="xp-value" id="questionScore">0/5</span>
           </div>
         </div>
 
-        <div class="question-text" id="questionText">Write down the value of</div>
+        <div class="question-type-badge" id="questionTypeBadge">KS3</div>
 
-        <div class="question-expression" id="questionExpression">3<sup>-2</sup></div>
+        <div class="question-text-block" id="questionText">Write down the value of</div>
 
-        <div class="question-input-wrap">
-          <input type="text" class="question-answer-input" placeholder="Type your answer" />
+        <div class="question-expression-block" id="questionExpression">3<sup>-2</sup></div>
+
+        <div class="answer-input-wrap">
+          <input type="text" class="question-answer-input" placeholder="Type your answer" autocomplete="off" />
         </div>
 
-        <button class="submit-btn btn-bracket btn-primary" id="submitBtn">Submit Answer</button>
+        <div class="submit-btn-row">
+          <button class="submit-btn-main btn btn-primary btn-bracket" id="submitBtn">Submit Answer</button>
+        </div>
 
-        <a href="#" class="watch-video">
+        <a href="#" class="watch-video" id="watchVideoLink">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
           Watch video
         </a>
+
+        <!-- Hint system -->
+        <div class="hint-system">
+          <div class="hint-header">
+            <span>Hint</span>
+            <span id="hintsRemaining">(3 left)</span>
+          </div>
+          <button class="hint-btn" id="hintBtn">
+            <span>Reveal hint</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 3 2 12"></polyline>
+            </svg>
+          </button>
+          <div id="hint1" class="hint-content"></div>
+          <div id="hint2" class="hint-content"></div>
+          <div id="hint3" class="hint-content"></div>
+        </div>
+
+        <!-- Explanation panel (shown after answer) -->
+        <div class="explanation-panel" id="explanationPanel">
+          <div class="explanation-header">
+            <span>Worked explanation</span>
+          </div>
+          <div class="explanation-content" id="explanationContent"></div>
+          <div class="explanation-answer" id="explanationAnswer"></div>
+        </div>
 
         <!-- Feedback overlay -->
         <div class="feedback-overlay" id="questionFeedback">
@@ -97,7 +152,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/question.js"></script>
+  <script src="js/adaptive-task.js"></script>
 
   <script>
     if ('serviceWorker' in navigator) {
