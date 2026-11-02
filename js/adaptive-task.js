@@ -1,7 +1,7 @@
 // ============================================================
 // 100Percent — Adaptive Task Engine (KS3)
-// Adaptive difficulty, progressive hints, worked explanations,
-// spaced repetition, streak tracking, full progress persistence.
+// Part 1: Topic selector (runs on task.html)
+// Part 2: Adaptive question engine (runs on question.html)
 // ============================================================
 
 /* global sb, answersMatch, gsap, window, document */
@@ -9,14 +9,8 @@
 (function () {
   'use strict';
 
-  // Only run on question.html
-  var page = document.querySelector('.app-shell');
-  if (!page || typeof sb === 'undefined' || typeof answersMatch === 'undefined') return;
-  if (!document.getElementById('questionExpression')) return;
-
   // ----------------------------------------------------------
   // KS3 Question Bank — adaptive by difficulty
-  // Each topic has easy / medium / hard questions.
   // Difficulty adjusts: correct x3 → step up; wrong → step down.
   // ----------------------------------------------------------
   var QUESTION_BANK = {
@@ -26,79 +20,79 @@
       questions: {
         easy: [
           {
-            id: 'nfi-e1', prompt: 'Evaluate:', expression: '2^{-3}', answer: '1/8',
-            hint1: 'A negative index means take the reciprocal: a^{-n} = 1 / a^n.',
-            hint2: '2^{-3} = 1 / 2^3.',
-            hint3: '2^3 = 8, so 2^{-3} = 1/8.',
-            explanation: 'A negative index means take the reciprocal. 2^{-3} = 1 / 2^3 = 1/8.',
+            id: 'nfi-e1', prompt: 'Evaluate:', expression: '2<sup>-3</sup>', answer: '1/8',
+            hint1: 'A negative index means take the reciprocal: a<sup>-n</sup> = 1 / a<sup>n</sup>.',
+            hint2: '2<sup>-3</sup> = 1 / 2<sup>3</sup>.',
+            hint3: '2<sup>3</sup> = 8, so 2<sup>-3</sup> = 1/8.',
+            explanation: 'A negative index means take the reciprocal. 2<sup>-3</sup> = 1 / 2<sup>3</sup> = 1/8.',
             type: 'indices'
           },
           {
-            id: 'nfi-e2', prompt: 'Evaluate:', expression: '5^{-2}', answer: '1/25',
-            hint1: '5^{-2} = 1 / 5^2.',
-            hint2: '5^2 = 25.',
-            hint3: 'So 5^{-2} = 1/25.',
-            explanation: '5^{-2} = 1 / 5^2 = 1/25.',
+            id: 'nfi-e2', prompt: 'Evaluate:', expression: '5<sup>-2</sup>', answer: '1/25',
+            hint1: '5<sup>-2</sup> = 1 / 5<sup>2</sup>.',
+            hint2: '5<sup>2</sup> = 25.',
+            hint3: 'So 5<sup>-2</sup> = 1/25.',
+            explanation: '5<sup>-2</sup> = 1 / 5<sup>2</sup> = 1/25.',
             type: 'indices'
           },
           {
-            id: 'nfi-e3', prompt: 'Evaluate:', expression: '10^{-1}', answer: '0.1',
-            hint1: '10^{-1} = 1 / 10^1 = 1/10.',
+            id: 'nfi-e3', prompt: 'Evaluate:', expression: '10<sup>-1</sup>', answer: '0.1',
+            hint1: '10<sup>-1</sup> = 1 / 10<sup>1</sup> = 1/10.',
             hint2: '1/10 as a decimal is 0.1.',
             hint3: '',
-            explanation: '10^{-1} = 1/10 = 0.1.',
+            explanation: '10<sup>-1</sup> = 1/10 = 0.1.',
             type: 'indices'
           }
         ],
         medium: [
           {
-            id: 'nfi-m1', prompt: 'Evaluate:', expression: '27^{1/3}', answer: '3',
+            id: 'nfi-m1', prompt: 'Evaluate:', expression: '27<sup>1/3</sup>', answer: '3',
             hint1: 'A fractional index 1/3 means cube root.',
             hint2: 'What number cubed gives 27?',
             hint3: '3 × 3 × 3 = 27, so the cube root of 27 is 3.',
-            explanation: '27^{1/3} means the cube root of 27. Since 3³ = 27, the answer is 3.',
+            explanation: '27<sup>1/3</sup> means the cube root of 27. Since 3³ = 27, the answer is 3.',
             type: 'indices'
           },
           {
-            id: 'nfi-m2', prompt: 'Evaluate:', expression: '16^{1/2}', answer: '4',
+            id: 'nfi-m2', prompt: 'Evaluate:', expression: '16<sup>1/2</sup>', answer: '4',
             hint1: 'An index of 1/2 means square root.',
             hint2: '√16 = ?',
             hint3: '4 × 4 = 16.',
-            explanation: '16^{1/2} = √16 = 4.',
+            explanation: '16<sup>1/2</sup> = √16 = 4.',
             type: 'indices'
           },
           {
-            id: 'nfi-m3', prompt: 'Simplify:', expression: 'x^{-2} × x^5', answer: 'x^3',
+            id: 'nfi-m3', prompt: 'Simplify:', expression: 'x<sup>-2</sup> × x<sup>5</sup>', answer: 'x^3',
             hint1: 'When multiplying with the same base, add the indices: -2 + 5.',
             hint2: '-2 + 5 = 3.',
-            hint3: 'So x^{-2} × x^5 = x^3.',
-            explanation: 'x^{-2} × x^5 = x^{-2+5} = x^3.',
+            hint3: 'So x<sup>-2</sup> × x<sup>5</sup> = x<sup>3</sup>.',
+            explanation: 'x<sup>-2</sup> × x<sup>5</sup> = x<sup>-2+5</sup> = x<sup>3</sup>.',
             type: 'indices'
           }
         ],
         hard: [
           {
-            id: 'nfi-h1', prompt: 'Simplify:', expression: '(1/4)^{-3/2}', answer: '8',
-            hint1: 'Negative index → reciprocal: (1/4)^{-3/2} = 4^{3/2}.',
-            hint2: '4^{3/2} = (√4)^3 = 2^3.',
-            hint3: '2^3 = 8.',
-            explanation: '(1/4)^{-3/2} = 4^{3/2} = (√4)^3 = 2^3 = 8.',
+            id: 'nfi-h1', prompt: 'Simplify:', expression: '(1/4)<sup>-3/2</sup>', answer: '8',
+            hint1: 'Negative index → reciprocal: (1/4)<sup>-3/2</sup> = 4<sup>3/2</sup>.',
+            hint2: '4<sup>3/2</sup> = (√4)<sup>3</sup> = 2<sup>3</sup>.',
+            hint3: '2<sup>3</sup> = 8.',
+            explanation: '(1/4)<sup>-3/2</sup> = 4<sup>3/2</sup> = (√4)<sup>3</sup> = 2<sup>3</sup> = 8.',
             type: 'indices'
           },
           {
-            id: 'nfi-h2', prompt: 'Evaluate:', expression: '64^{-2/3}', answer: '1/16',
-            hint1: '64^{-2/3} = 1 / 64^{2/3}.',
-            hint2: '64^{1/3} = 4, then 4^2 = 16.',
-            hint3: 'So 64^{-2/3} = 1/16.',
-            explanation: '64^{-2/3} = 1 / 64^{2/3} = 1 / (∛64)^2 = 1 / 4^2 = 1/16.',
+            id: 'nfi-h2', prompt: 'Evaluate:', expression: '64<sup>-2/3</sup>', answer: '1/16',
+            hint1: '64<sup>-2/3</sup> = 1 / 64<sup>2/3</sup>.',
+            hint2: '64<sup>1/3</sup> = 4, then 4<sup>2</sup> = 16.',
+            hint3: 'So 64<sup>-2/3</sup> = 1/16.',
+            explanation: '64<sup>-2/3</sup> = 1 / 64<sup>2/3</sup> = 1 / (∛64)<sup>2</sup> = 1 / 4<sup>2</sup> = 1/16.',
             type: 'indices'
           },
           {
-            id: 'nfi-h3', prompt: 'Simplify:', expression: '(27/8)^{-2/3}', answer: '4/9',
-            hint1: 'Flip the fraction first: (27/8)^{-2/3} = (8/27)^{2/3}.',
-            hint2: '(8/27)^{1/3} = 2/3, then square it: (2/3)^2.',
-            hint3: '(2/3)^2 = 4/9.',
-            explanation: '(27/8)^{-2/3} = (8/27)^{2/3} = (∛(8/27))^2 = (2/3)^2 = 4/9.',
+            id: 'nfi-h3', prompt: 'Simplify:', expression: '(27/8)<sup>-2/3</sup>', answer: '4/9',
+            hint1: 'Flip the fraction first: (27/8)<sup>-2/3</sup> = (8/27)<sup>2/3</sup>.',
+            hint2: '(8/27)<sup>1/3</sup> = 2/3, then square it: (2/3)<sup>2</sup>.',
+            hint3: '(2/3)<sup>2</sup> = 4/9.',
+            explanation: '(27/8)<sup>-2/3</sup> = (8/27)<sup>2/3</sup> = (∛(8/27))<sup>2</sup> = (2/3)<sup>2</sup> = 4/9.',
             type: 'indices'
           }
         ]
@@ -128,29 +122,29 @@
         ],
         medium: [
           {
-            id: 'af-m1', prompt: 'Simplify:', expression: '(x^2 - 9) / (x - 3)', answer: 'x + 3',
-            hint1: 'Factor the numerator: x^2 - 9 = (x - 3)(x + 3).',
+            id: 'af-m1', prompt: 'Simplify:', expression: '(x<sup>2</sup> - 9) / (x - 3)', answer: 'x + 3',
+            hint1: 'Factor the numerator: x<sup>2</sup> - 9 = (x - 3)(x + 3).',
             hint2: 'Cancel (x - 3) from top and bottom.',
             hint3: 'Leaves x + 3.',
-            explanation: '(x^2 - 9) / (x - 3) = (x-3)(x+3) / (x-3) = x + 3.',
+            explanation: '(x<sup>2</sup> - 9) / (x - 3) = (x-3)(x+3) / (x-3) = x + 3.',
             type: 'algebra'
           },
           {
-            id: 'af-m2', prompt: 'Simplify:', expression: '2x / 6x^2', answer: '1/(3x)',
+            id: 'af-m2', prompt: 'Simplify:', expression: '2x / 6x<sup>2</sup>', answer: '1/(3x)',
             hint1: '2/6 = 1/3.',
-            hint2: 'x / x^2 = 1/x.',
-            hint3: 'So 2x / 6x^2 = 1/(3x).',
-            explanation: '2x / 6x^2 = (1/3) · (1/x) = 1/(3x).',
+            hint2: 'x / x<sup>2</sup> = 1/x.',
+            hint3: 'So 2x / 6x<sup>2</sup> = 1/(3x).',
+            explanation: '2x / 6x<sup>2</sup> = (1/3) · (1/x) = 1/(3x).',
             type: 'algebra'
           }
         ],
         hard: [
           {
-            id: 'af-h1', prompt: 'Simplify:', expression: '(x^2 - 4) / (x^2 - 4x + 4)', answer: '(x + 2) / (x - 2)',
-            hint1: 'Factor: x^2 - 4 = (x - 2)(x + 2).',
-            hint2: 'Factor: x^2 - 4x + 4 = (x - 2)^2.',
+            id: 'af-h1', prompt: 'Simplify:', expression: '(x<sup>2</sup> - 4) / (x<sup>2</sup> - 4x + 4)', answer: '(x + 2) / (x - 2)',
+            hint1: 'Factor: x<sup>2</sup> - 4 = (x - 2)(x + 2).',
+            hint2: 'Factor: x<sup>2</sup> - 4x + 4 = (x - 2)<sup>2</sup>.',
             hint3: 'Cancel (x - 2): (x + 2) / (x - 2).',
-            explanation: '(x^2 - 4)/(x^2 - 4x + 4) = (x-2)(x+2) / (x-2)^2 = (x+2)/(x-2).',
+            explanation: '(x<sup>2</sup> - 4)/(x<sup>2</sup> - 4x + 4) = (x-2)(x+2) / (x-2)<sup>2</sup> = (x+2)/(x-2).',
             type: 'algebra'
           }
         ]
@@ -207,8 +201,8 @@
           },
           {
             id: 's-h2', prompt: 'Simplify:', expression: '(2 + √3)(2 - √3)', answer: '1',
-            hint1: 'Difference of squares: (a + b)(a - b) = a^2 - b^2.',
-            hint2: '2^2 - (√3)^2 = 4 - 3.',
+            hint1: 'Difference of squares: (a + b)(a - b) = a<sup>2</sup> - b<sup>2</sup>.',
+            hint2: '2<sup>2</sup> - (√3)<sup>2</sup> = 4 - 3.',
             hint3: '4 - 3 = 1.',
             explanation: '(2+√3)(2-√3) = 4 - 3 = 1.',
             type: 'surds'
@@ -274,9 +268,9 @@
       questions: {
         easy: [
           {
-            id: 'pt-e1', prompt: 'Find the hypotenuse:', expression: 'a=3, b=4', answer: '5',
-            hint1: 'a^2 + b^2 = c^2.',
-            hint2: '3^2 + 4^2 = 9 + 16 = 25.',
+            id: 'pt-e1', prompt: 'Find the hypotenuse:', expression: 'a = 3, b = 4', answer: '5',
+            hint1: 'a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>.',
+            hint2: '3<sup>2</sup> + 4<sup>2</sup> = 9 + 16 = 25.',
             hint3: '√25 = 5.',
             explanation: 'c = √(3² + 4²) = √25 = 5.',
             type: 'geometry'
@@ -284,8 +278,8 @@
         ],
         medium: [
           {
-            id: 'pt-m1', prompt: 'Find the missing side:', expression: 'a=5, c=13', answer: '12',
-            hint1: 'b^2 = c^2 - a^2 = 13^2 - 5^2.',
+            id: 'pt-m1', prompt: 'Find the missing side:', expression: 'a = 5, c = 13', answer: '12',
+            hint1: 'b<sup>2</sup> = c<sup>2</sup> - a<sup>2</sup> = 13<sup>2</sup> - 5<sup>2</sup>.',
             hint2: '169 - 25 = 144.',
             hint3: '√144 = 12.',
             explanation: 'b = √(13² - 5²) = √144 = 12.',
@@ -294,8 +288,8 @@
         ],
         hard: [
           {
-            id: 'pt-h1', prompt: 'Find hypotenuse:', expression: 'a=8, b=15', answer: '17',
-            hint1: '8^2 + 15^2 = 64 + 225 = 289.',
+            id: 'pt-h1', prompt: 'Find hypotenuse:', expression: 'a = 8, b = 15', answer: '17',
+            hint1: '8<sup>2</sup> + 15<sup>2</sup> = 64 + 225 = 289.',
             hint2: '√289 = 17.',
             hint3: '',
             explanation: 'c = √(8² + 15²) = √289 = 17.',
@@ -306,9 +300,9 @@
     }
   };
 
-  // ----------------------------------------------------------
-  // Topic selector (task.html)
-  // ----------------------------------------------------------
+  // ============================================================
+  // PART 1 — Topic selector (runs on task.html)
+  // ============================================================
   var topicSelector = document.getElementById('topicSelector');
   if (topicSelector) {
     Object.keys(QUESTION_BANK).forEach(function (key) {
@@ -324,7 +318,6 @@
         '  <div class="topic-meta-item"><span class="topic-meta-label">XP</span><span class="topic-meta-value">+50</span></div>' +
         '</div>';
       card.addEventListener('click', function () {
-        // Store selected topic and go to question page
         localStorage.setItem('100p_topic', key);
         localStorage.setItem('100p_difficulty', 'medium');
         window.location.href = 'question.html';
@@ -333,9 +326,12 @@
     });
   }
 
-  // ----------------------------------------------------------
-  // Question page adaptive engine
-  // ----------------------------------------------------------
+  // ============================================================
+  // PART 2 — Adaptive question engine (runs on question.html)
+  // ============================================================
+  if (!document.getElementById('questionExpression')) return;
+  if (typeof sb === 'undefined' || typeof answersMatch === 'undefined') return;
+
   var topicEl = document.getElementById('questionTopic');
   var textEl = document.getElementById('questionText');
   var exprEl = document.getElementById('questionExpression');
@@ -387,7 +383,7 @@
 
   function loadQuestions() {
     var bank = topicData.questions[currentDifficulty];
-    questions = bank.slice(0, 5); // 5 questions
+    questions = bank.slice(0, 5);
     if (totalEl) totalEl.textContent = questions.length;
     if (topicEl) topicEl.textContent = topicData.label;
     if (typeBadge) typeBadge.textContent = topicData.topicCode || 'KS3';
@@ -443,7 +439,6 @@
     if (statStreak) statStreak.textContent = currentStreakCount;
     if (statXp) statXp.textContent = totalXP;
 
-    // Question nav dots
     if (navEl) {
       navEl.innerHTML = '';
       questions.forEach(function (_q, i) {
@@ -458,7 +453,6 @@
       });
     }
 
-    // Reset hints
     hintsUsed = 0;
     hintsRemainingEl.textContent = '(3 left)';
     hintBtn.disabled = false;
@@ -505,7 +499,6 @@
     feedbackEl.classList.remove('show');
   }
 
-  // Hint system
   if (hintBtn) {
     hintBtn.addEventListener('click', function () {
       if (hintsUsed >= 3) return;
@@ -544,7 +537,6 @@
 
     showFeedback(correct, correct ? 'Correct! Well done.' : 'Not quite. The answer is ' + q.answer + '.');
 
-    // Show explanation
     explanationPanel.classList.add('visible');
     explanationContent.textContent = q.explanation;
     explanationAnswer.textContent = 'Answer: ' + q.answer;
