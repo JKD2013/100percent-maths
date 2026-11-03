@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page not found | 100Percent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- Fixed HUD -->
+  <div class="hud">
+    <div class="hud-tl">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">100</div>
+        <span class="logo-word">Percent</span>
+      </a>
+    </div>
+    <div class="hud-tr">
+      <a href="login.html" class="hud-nav">Sign in</a>
+      <a href="https://github.com/JKD2013/100percent-maths" target="_blank" rel="noopener noreferrer" class="hud-nav hud-nav-github">GitHub</a>
+    </div>
+    <div class="hud-bl">
+      <span class="mono-label">404 <span class="cue-arrow">⚠</span></span>
+    </div>
+    <div class="hud-br">
+      <span class="dot"></span><span class="mono-label">Page missing</span>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <div class="app-container">
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-kicker">Error 404</div>
+          <h2 class="section-title">Page not found</h2>
+        </div>
+        <div class="task-description-card">
+          <p class="task-description-text">
+            The page you're looking for doesn't exist. It may have been moved or deleted.
+          </p>
+        </div>
+        <div style="margin-top: 24px;">
+          <a href="index.html" class="btn btn-primary btn-lg btn-bracket">Back to homepage</a>
+          <a href="login.html" class="btn btn-ghost btn-lg btn-bracket">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(function(err) {
+        console.log('Service worker registration failed:', err);
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service | 100Percent</title>
+  <meta name="description" content="100Percent terms of service — terms for students, teachers, and schools using the platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- Fixed HUD -->
+  <div class="hud">
+    <div class="hud-tl">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">100</div>
+        <span class="logo-word">Percent</span>
+      </a>
+    </div>
+    <div class="hud-tr">
+      <a href="login.html" class="hud-nav">Sign in</a>
+      <a href="https://github.com/JKD2013/100percent-maths" target="_blank" rel="noopener noreferrer" class="hud-nav hud-nav-github">GitHub</a>
+    </div>
+    <div class="hud-bl">
+      <span class="mono-label">TERMS <span class="cue-arrow">▾</span></span>
+    </div>
+    <div class="hud-br">
+      <span class="dot"></span><span class="mono-label">Of Service</span>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <div class="app-container">
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-kicker">Legal</div>
+          <h2 class="section-title">Terms of Service</h2>
+        </div>
+
+        <div class="create-card" style="max-width: 800px;">
+          <p class="task-description-text">
+            <strong>Last updated:</strong> 2 November 2026
+          </p>
+
+          <h3 class="task-description-title">1. Acceptance of terms</h3>
+          <p>By accessing or using 100Percent, you agree to these terms. If you do not agree, you may not use the platform.</p>
+
+          <h3 class="task-description-title">2. Accounts</h3>
+          <ul class="learning-list">
+            <li>Students and teachers must provide accurate registration information.</li>
+            <li>Account credentials must not be shared.</li>
+            <li>Schools are responsible for managing student accounts within their institution.</li>
+          </ul>
+
+          <h3 class="task-description-title">3. Acceptable use</h3>
+          <ul class="learning-list">
+            <li>Use the platform only for educational purposes.</li>
+            <li>Do not attempt to access other users' accounts or data.</li>
+            <li>Do not submit offensive, harmful, or inappropriate content.</li>
+          </ul>
+
+          <h3 class="task-description-title">4. Intellectual property</h3>
+          <p>All platform content, software, and design are owned by 100Percent or its licensors. Teacher-created questions remain the property of the creating teacher, subject to the school's employment policies.</p>
+
+          <h3 class="task-description-title">5. Disclaimer</h3>
+          <p>The platform is provided "as is" without warranties. While we strive for accuracy, mathematical content should be verified by teachers before assignment to students.</p>
+
+          <h3 class="task-description-title">6. Termination</h3>
+          <p>We may suspend or terminate accounts that violate these terms. Schools may terminate their institution's access at any time.</p>
+
+          <h3 class="task-description-title">7. Changes to terms</h3>
+          <p>We may update these terms from time to time. Continued use of the platform constitutes acceptance of the updated terms.</p>
+
+          <p style="margin-top: 32px;">
+            <a href="index.html" class="btn btn-ghost btn-sm btn-bracket">Back to homepage</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(function(err) {
+        console.log('Service worker registration failed:', err);
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -737,11 +737,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const reduced = prefersReducedMotion();
 
   initPreloader();
-  initLenis();
   initHeaderScroll();
   initAnchorLinks();
-
   if (!reduced) {
+    initLenis();
     initVanta();
     initHeroAnimations();
     initScrollAnimations();

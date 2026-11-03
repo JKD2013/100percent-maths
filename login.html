@@ -78,7 +78,7 @@
         <button type="submit" class="btn btn-primary btn-lg btn-bracket btn-full" id="signinSubmitBtn">Sign in</button>
 
         <div class="auth-help">
-          <a href="#" id="forgotPasswordLink">Having trouble signing in?</a>
+          <a href="#reset-password" id="forgotPasswordLink">Having trouble signing in?</a>
         </div>
       </form>
 
@@ -120,14 +120,14 @@
   </div>
 
   <!-- Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/auth-login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="js/supabase-client.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/auth-login.js" defer></script>
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(function(reg) {
+      navigator.serviceWorker.register('./sw.js').then(function(reg) {
         console.log('Service worker registered:', reg);
       }).catch(function(err) {
         console.log('Service worker registration failed:', err);

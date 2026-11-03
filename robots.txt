@@ -1,0 +1,28 @@
+100Percent user-agent disallow: /
+# Blocked intentionally — site has no public crawlable content beyond index
+
+User-agent: *
+Allow: /index.html
+Allow: /login.html
+Allow: /signup.html
+Allow: /for-students.html
+Allow: /for-teachers.html
+Allow: /for-schools.html
+Allow: /about-us.html
+Allow: /pricing.html
+Allow: /contact-us.html
+Disallow: /dashboard.html
+Disallow: /task.html
+Disallow: /question.html
+Disallow: /teacher-dashboard.html
+Disallow: /question-bank.html
+Disallow: /leaderboard.html
+Disallow: /group-detail.html
+Disallow: /create-assignment.html
+Disallow: /assignment-progress.html
+Disallow: /privacy-policy.html
+Disallow: /terms.html
+Disallow: /js/
+Disallow: /css/
+
+Sitemap: https://jkd2013.github.io/100percent-maths/sitemap.xml
